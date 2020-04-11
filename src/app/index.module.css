@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #e6eaea;
+    font-family: "Baloo Tamma 2", cursive;
+}
+
+.container {
+    max-width: 1800px;
+    margin: auto;
+}

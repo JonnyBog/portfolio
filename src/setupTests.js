@@ -13,44 +13,44 @@ import rootReducer from './reducers';
 configure({ adapter: new Adapter() });
 
 export const setupTestComponent = ({ render } = {}) => ({ props } = {}) => ({
-  wrapper: mount(
-    <MemoryRouter>{React.cloneElement(render(), props)}</MemoryRouter>
-  )
+    wrapper: mount(
+        <MemoryRouter>{React.cloneElement(render(), props)}</MemoryRouter>
+    )
 });
 
 export const setupTestProvider = ({
-  render,
-  prerender: basePrerender = () => {},
-  path: basePath,
-  initialEntries: baseInitialEntries
+    render,
+    prerender: basePrerender = () => {},
+    path: basePath,
+    initialEntries: baseInitialEntries
 } = {}) => ({
-  props,
-  prerender: testPrerender = () => {},
-  path: testPath,
-  initialEntries: testInitialEntries
+    props,
+    prerender: testPrerender = () => {},
+    path: testPath,
+    initialEntries: testInitialEntries
 } = {}) => {
-  const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
-  let history;
-  basePrerender(store);
-  testPrerender(store);
-  const path = testPath || basePath || '*';
-  const initialEntries = testInitialEntries || baseInitialEntries || ['/'];
+    const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
+    let history;
+    basePrerender(store);
+    testPrerender(store);
+    const path = testPath || basePath || '*';
+    const initialEntries = testInitialEntries || baseInitialEntries || ['/'];
 
-  return {
-    wrapper: mount(
-      <MemoryRouter initialEntries={initialEntries}>
-        <Provider store={store}>
-          <Route
-            path={path}
-            render={({ history: _history }) => {
-              history = _history;
-              return React.cloneElement(render(), props);
-            }}
-          />
-        </Provider>
-      </MemoryRouter>
-    ),
-    store,
-    history
-  };
+    return {
+        wrapper: mount(
+            <MemoryRouter initialEntries={initialEntries}>
+                <Provider store={store}>
+                    <Route
+                        path={path}
+                        render={({ history: _history }) => {
+                            history = _history;
+                            return React.cloneElement(render(), props);
+                        }}
+                    />
+                </Provider>
+            </MemoryRouter>
+        ),
+        store,
+        history
+    };
 };

@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './index.css';
+import styles from './index.module.css';
 
 const Wrapper = ({ children }) => (
-  <div className="wrapper" data-qa="wrapper">
-    {children}
-  </div>
+    <div className={styles.wrapper} data-qa="wrapper">
+        {children}
+    </div>
 );
 
 Wrapper.propTypes = {
-  children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired
 };
 
 export default Wrapper;

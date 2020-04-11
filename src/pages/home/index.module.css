@@ -1,0 +1,17 @@
+.description {
+    max-width: 600px;
+    margin: 100px auto;
+}
+
+.pageHeading {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.projectTitle {
+    text-transform: capitalize;
+}
+
+.projectImg {
+    margin-bottom: 15px;
+}

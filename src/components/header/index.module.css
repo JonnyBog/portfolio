@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+}
+
+.name {
+    margin-bottom: 10px;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.navLink {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.navList {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+    .header {
+        padding: 15px;
+    }
+
+    .navLink .text {
+        vertical-align: top;
+    }
+}

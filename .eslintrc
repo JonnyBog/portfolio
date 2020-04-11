@@ -79,5 +79,10 @@
       "files": ["*.test.js", "*.spec.js"]
     }
   ],
-  "plugins": ["react", "import", "prettier", "react-hooks"]
+  "plugins": ["react", "import", "prettier", "react-hooks"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

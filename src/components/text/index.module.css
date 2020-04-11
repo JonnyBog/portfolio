@@ -1,0 +1,41 @@
+.text {
+    margin: 0;
+}
+
+.body {
+    font-size: 12px;
+}
+
+.medium {
+    font-size: 24px;
+}
+
+.large {
+    font-size: 32px;
+}
+
+.grey {
+    color: #979797;
+}
+
+.black {
+    color: #000;
+}
+
+.red {
+    color: #e70202;
+}
+
+@media (max-width: 767px) {
+    .text {
+        font-size: 14px;
+    }
+
+    .large {
+        font-size: 24px;
+    }
+
+    .medium {
+        font-size: 18px;
+    }
+}

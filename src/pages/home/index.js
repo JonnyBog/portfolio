@@ -14,92 +14,98 @@ import { requestProjects } from '../../actions/projects-actions';
 
 import { routes } from '../../lib/constants';
 
-import './index.css';
+import styles from './index.module.css';
 
 export default () => {
-  const dispatch = useDispatch();
-  const {
-    isInitial: isHomeInitial,
-    isPending: isHomePending,
-    hasError: hasHomeError,
-    data: home
-  } = useSelector(state => state.home);
-  const {
-    isInitial: isProjectsInitial,
-    isPending: isProjectsPending,
-    hasError: hasProjectsError,
-    data: projects
-  } = useSelector(state => state.projects);
+    const dispatch = useDispatch();
+    const {
+        isInitial: isHomeInitial,
+        isPending: isHomePending,
+        hasError: hasHomeError,
+        data: home
+    } = useSelector((state) => state.home);
+    const {
+        isInitial: isProjectsInitial,
+        isPending: isProjectsPending,
+        hasError: hasProjectsError,
+        data: projects
+    } = useSelector((state) => state.projects);
 
-  useEffect(() => {
-    dispatch(requestHome());
-    dispatch(requestProjects());
-  }, [dispatch]);
+    useEffect(() => {
+        dispatch(requestHome());
+        dispatch(requestProjects());
+    }, [dispatch]);
 
-  if (hasHomeError || hasProjectsError) {
+    if (hasHomeError || hasProjectsError) {
+        return (
+            <ErrorMessage>
+                Oops, something went wrong with loading the homepage.
+            </ErrorMessage>
+        );
+    }
+
+    if (
+        isHomeInitial ||
+        isHomePending ||
+        isProjectsInitial ||
+        isProjectsPending
+    ) {
+        return <Loader />;
+    }
+
     return (
-      <ErrorMessage>
-        Oops, something went wrong with loading the homepage.
-      </ErrorMessage>
+        <Wrapper>
+            <div className={styles.description}>
+                <Text style={Text.styles.medium} dataId="description">
+                    {home.acf.description}
+                </Text>
+            </div>
+
+            <div className={styles.pageHeading}>
+                <Text
+                    element={Text.elements.h1}
+                    style={Text.styles.large}
+                    dataId="page-heading"
+                >
+                    {home.acf.heading}
+                </Text>
+            </div>
+
+            <Tiles>
+                {projects.map(({ slug, title, acf }) => {
+                    const titleRendered = title.rendered;
+
+                    return (
+                        <Link to={`${routes.project}/${slug}`} key={slug}>
+                            <Tiles.Tile dataId={slug}>
+                                <div className={styles.projectImg}>
+                                    <Image
+                                        src={acf.image.sizes.medium_large}
+                                        alt={titleRendered}
+                                        sources={[
+                                            {
+                                                srcSet:
+                                                    acf.image.sizes[
+                                                        'post-thumbnail'
+                                                    ],
+                                                width:
+                                                    acf.image.sizes[
+                                                        'medium_large-width'
+                                                    ]
+                                            }
+                                        ]}
+                                    />
+                                </div>
+                                <div className={styles.projectTitle}>
+                                    <Text style={Text.styles.medium}>
+                                        {titleRendered}
+                                    </Text>
+                                </div>
+                            </Tiles.Tile>
+                        </Link>
+                    );
+                })}
+            </Tiles>
+        </Wrapper>
     );
-  }
-
-  if (
-    isHomeInitial ||
-    isHomePending ||
-    isProjectsInitial ||
-    isProjectsPending
-  ) {
-    return <Loader />;
-  }
-
-  return (
-    <div className="home">
-      <Wrapper>
-        <div className="description">
-          <Text style={Text.styles.medium} dataId="description">
-            {home.acf.description}
-          </Text>
-        </div>
-
-        <div className="page-heading">
-          <Text
-            element={Text.elements.h1}
-            style={Text.styles.large}
-            dataId="page-heading"
-          >
-            {home.acf.heading}
-          </Text>
-        </div>
-
-        <Tiles>
-          {projects.map(({ slug, title, acf }) => {
-            const titleRendered = title.rendered;
-
-            return (
-              <Tiles.Tile key={slug} dataId={slug}>
-                <Link to={`${routes.project}/${slug}`}>
-                  <div className="project__img">
-                    <Image
-                      src={acf.image.sizes.medium_large}
-                      alt={titleRendered}
-                      sources={[
-                        {
-                          srcSet: acf.image.sizes['post-thumbnail'],
-                          width: acf.image.sizes['medium_large-width']
-                        }
-                      ]}
-                    />
-                  </div>
-                  <div className="project__title">
-                    <Text style={Text.styles.medium}>{titleRendered}</Text>
-                  </div>
-                </Link>
-              </Tiles.Tile>
-            );
-          })}
-        </Tiles>
-      </Wrapper>
-    </div>
-  );
 };

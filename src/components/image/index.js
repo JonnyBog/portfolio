@@ -3,51 +3,53 @@ import PropTypes from 'prop-types';
 
 import useImage from '../../hooks/use-image';
 
-const Source = ({ srcSet: srcSetRaw, width }) => {
-  const srcSet = useImage(srcSetRaw);
+import styles from './index.module.css';
 
-  return (
-    <source
-      srcSet={srcSet}
-      data-srcset={srcSetRaw}
-      media={`(min-width: ${width}px)`}
-    />
-  );
+const Source = ({ srcSet: srcSetRaw, width }) => {
+    const srcSet = useImage(srcSetRaw);
+
+    return (
+        <source
+            srcSet={srcSet}
+            data-srcset={srcSetRaw}
+            media={`(min-width: ${width}px)`}
+        />
+    );
 };
 
 Source.propTypes = {
-  srcSet: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired
+    srcSet: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired
 };
 
 const Image = ({ src: srcRaw, alt, sources, dataId }) => {
-  const src = useImage(srcRaw);
+    const src = useImage(srcRaw);
 
-  return (
-    <picture data-qa="image" data-id={dataId}>
-      {sources.map(({ srcSet, width }) => (
-        <Source srcSet={srcSet} width={width} key={srcSet} />
-      ))}
-      <img src={src} alt={alt} data-src={srcRaw} />
-    </picture>
-  );
+    return (
+        <picture data-qa="image" data-id={dataId} className={styles.picture}>
+            {sources.map(({ srcSet, width }) => (
+                <Source srcSet={srcSet} width={width} key={srcSet} />
+            ))}
+            <img src={src} alt={alt} data-src={srcRaw} className={styles.img} />
+        </picture>
+    );
 };
 
 Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
-  sources: PropTypes.arrayOf(
-    PropTypes.shape({
-      srcSet: PropTypes.string,
-      width: PropTypes.number
-    })
-  ),
-  dataId: PropTypes.string
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    sources: PropTypes.arrayOf(
+        PropTypes.shape({
+            srcSet: PropTypes.string,
+            width: PropTypes.number
+        })
+    ),
+    dataId: PropTypes.string
 };
 
 Image.defaultProps = {
-  sources: [],
-  dataId: null
+    sources: [],
+    dataId: null
 };
 
 export default Image;

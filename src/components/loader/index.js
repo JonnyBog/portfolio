@@ -1,15 +1,16 @@
 import React from 'react';
+import cx from 'classnames';
 
-import './index.css';
+import styles from './index.module.css';
 
 const Loader = () => (
-  <div className="loader-wrapper" data-qa="loader">
-    <div className="loader">
-      <div className="loader-dot loader-dot--1"></div>
-      <div className="loader-dot loader-dot--2"></div>
-      <div className="loader-dot loader-dot--3"></div>
+    <div className={styles.loaderWrapper} data-qa="loader">
+        <div className={styles.loader}>
+            <div className={cx(styles.loaderDot, styles.loaderDot1)} />
+            <div className={cx(styles.loaderDot, styles.loaderDot2)} />
+            <div className={cx(styles.loaderDot, styles.loaderDot3)} />
+        </div>
     </div>
-  </div>
 );
 
 export default Loader;

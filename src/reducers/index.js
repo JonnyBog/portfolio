@@ -6,10 +6,10 @@ import projects from './projects-reducers';
 import contact from './contact-reducers';
 
 const rootReducer = combineReducers({
-  projects,
-  home,
-  contact,
-  routing: routerReducer
+    projects,
+    home,
+    contact,
+    routing: routerReducer
 });
 
 export default rootReducer;
