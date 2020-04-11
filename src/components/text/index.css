@@ -1,0 +1,42 @@
+.text {
+  margin: 0;
+  font-family: "Inconsolata", monospace;
+}
+
+.text.body {
+  font-size: 12px;
+}
+
+.text.medium {
+  font-size: 24px;
+}
+
+.text.large {
+  font-size: 32px;
+}
+
+.text.grey {
+  color: #979797;
+}
+
+.text.black {
+  color: #000;
+}
+
+.text.red {
+  color: #e70202;
+}
+
+@media (max-width: 767px) {
+  .text {
+    font-size: 14px;
+  }
+
+  .text.large {
+    font-size: 24px;
+  }
+
+  .text.medium {
+    font-size: 18px;
+  }
+}
