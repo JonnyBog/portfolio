@@ -1,0 +1,40 @@
+.description {
+  max-width: 600px;
+  margin: 100px auto;
+}
+
+.name-container {
+  flex: 1;
+}
+
+.name-container__copy {
+  margin: 0;
+}
+
+.page-heading {
+  margin-bottom: 20px;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.project__img img {
+  max-width: 100%;
+}
+
+.project__title {
+  margin-top: 15px;
+  text-transform: capitalize;
+}
+
+@media (max-width: 767px) {
+  .description {
+    height: 100vh;
+    position: relative;
+    margin: 0;
+    text-align: center;
+  }
+  .description .text {
+    position: absolute;
+    top: 30%;
+  }
+}
