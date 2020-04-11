@@ -25,15 +25,15 @@ function fetchContactError() {
   };
 }
 
-export const requestContactApi = `${prependRequest}/${api}/pages?slug=contact&_fields=acf`;
+export const requestContactApi = `${prependRequest}${api}/pages?slug=contact&_fields=acf`;
 
 export function requestContact() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchContact());
     return fetch(requestContactApi)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(
-        data => dispatch(fetchContactSuccess(data)),
+        (data) => dispatch(fetchContactSuccess(data)),
         () => dispatch(fetchContactError())
       );
   };

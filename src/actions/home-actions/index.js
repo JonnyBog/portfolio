@@ -20,15 +20,15 @@ function fetchHomeError() {
   };
 }
 
-export const requestHomeApi = `${prependRequest}/${api}/pages?slug=home&_fields=acf`;
+export const requestHomeApi = `${prependRequest}${api}/pages?slug=home&_fields=acf`;
 
 export function requestHome() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchHome());
     return fetch(requestHomeApi)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(
-        data => dispatch(fetchHomeSuccess(data)),
+        (data) => dispatch(fetchHomeSuccess(data)),
         () => dispatch(fetchHomeError())
       );
   };

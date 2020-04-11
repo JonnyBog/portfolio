@@ -1,4 +1,4 @@
-import { api,prependRequest } from '../../lib/constants';
+import { api, prependRequest } from '../../lib/constants';
 import {
   FETCH_PROJECTS,
   FETCH_PROJECTS_SUCCESS,
@@ -24,18 +24,18 @@ function fetchProjectsError() {
   };
 }
 
-const requestProjectsApi = `${prependRequest}/${api}/project?_fields=title,acf,slug`;
+const requestProjectsApi = `${prependRequest}${api}/project?_fields=title,acf,slug`;
 
-export const getRequestProjectsApi = slug =>
+export const getRequestProjectsApi = (slug) =>
   slug ? `${requestProjectsApi}&slug=${slug}` : requestProjectsApi;
 
 export function requestProjects(slug) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchProjects());
     return fetch(getRequestProjectsApi(slug))
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(
-        data => dispatch(fetchProjectsSuccess(data)),
+        (data) => dispatch(fetchProjectsSuccess(data)),
         () => dispatch(fetchProjectsError())
       );
   };
