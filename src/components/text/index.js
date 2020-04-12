@@ -27,7 +27,6 @@ Text.elements = {
 };
 
 Text.colors = {
-    grey: 'grey',
     black: 'black',
     red: 'red'
 };

@@ -8,7 +8,7 @@ import styles from './index.module.css';
 
 const Header = () => (
     <header className={styles.header} data-qa="header">
-        <div className={styles.nameContainer}>
+        <div className={styles.nameDescription}>
             <div className={styles.name}>
                 <Text
                     element={Text.elements.span}
@@ -18,11 +18,13 @@ const Header = () => (
                     <Link to={routes.home}>Jonny Boggon</Link>
                 </Text>
             </div>
-            <Text dataId="job-description">Frontend Developer</Text>
+            <Text dataId="job-description" element={Text.elements.span}>
+                Frontend Developer
+            </Text>
         </div>
         <div className={styles.nav}>
             <div className={styles.navLink}>
-                <Text element={Text.elements.span} dataId="contact-link">
+                <Text element={Text.elements.div} dataId="contact-link">
                     <Link to={routes.contact}>Contact</Link>
                 </Text>
             </div>

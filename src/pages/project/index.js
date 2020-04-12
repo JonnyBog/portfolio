@@ -53,7 +53,7 @@ export default () => {
             <Wrapper>
                 <Tiles>
                     <Tiles.Tile>
-                        <div className={styles.projectTitle}>
+                        <div className={styles.title}>
                             <Text
                                 element={Text.elements.h1}
                                 style={Text.styles.large}
@@ -62,7 +62,7 @@ export default () => {
                                 {titleRendered}
                             </Text>
                         </div>
-                        <div className={styles.projectImg}>
+                        <div className={styles.img}>
                             <Image
                                 src={sizes.medium_large}
                                 alt={titleRendered}
@@ -79,7 +79,7 @@ export default () => {
                                 ]}
                             />
                         </div>
-                        <div className={styles.projectCreated}>
+                        <div className={styles.created}>
                             <Text
                                 style={Text.styles.medium}
                                 dataId="created-width"
@@ -87,12 +87,12 @@ export default () => {
                                 Built at: {created_with}
                             </Text>
                         </div>
-                        <div className={styles.projectTools}>
+                        <div className={styles.tools}>
                             <Text style={Text.styles.medium} dataId="tools">
                                 Tools used: {tools}
                             </Text>
                         </div>
-                        <div className={styles.projectLink}>
+                        <div className={styles.link}>
                             <Text>
                                 <Link to={project_link.url} isAnchor isExternal>
                                     {project_link.title}

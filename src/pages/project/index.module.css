@@ -1,26 +1,29 @@
-/* .project .tile {
-  flex-basis: initial;
-  max-width: 1000px;
-  width: 100%;
-} */
-
-.projectTitle {
-    margin-bottom: 15px;
+.title {
+    margin-bottom: 10px;
     text-transform: capitalize;
 }
 
-.projectLink {
+.img {
+    margin-bottom: 20px;
+}
+
+.created,
+.tools {
+    margin-bottom: 15px;
+}
+
+.link a {
     padding: 10px;
     background: #000;
     border: 1px solid #e6eaea;
     max-width: 100px;
     margin: auto;
     color: #fff;
+    transition: all 0.5s;
 }
 
-.projectLink:hover {
+.link a:hover {
     background: #e6eaea;
     border: 1px solid #000;
     color: #000;
-    transition: all 0.5s;
 }

@@ -40,4 +40,19 @@ describe('Components: Tiles', () => {
         const { wrapper } = setupTest();
         expect(wrapper.find('[data-qa="tiles"]')).toExist();
     });
+
+    it('renders isFullWidth className when there is one tile', () => {
+        const { wrapper } = setupTest({
+            render: () => (
+                <Tiles>
+                    <Tiles.Tile>
+                        <div>Tile 1</div>
+                    </Tiles.Tile>
+                </Tiles>
+            )
+        });
+        expect(wrapper.find('[data-qa="tiles"]')).toHaveClassName(
+            'isFullWidth'
+        );
+    });
 });

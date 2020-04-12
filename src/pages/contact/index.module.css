@@ -1,7 +1,9 @@
 .contact {
     text-align: center;
+    padding-top: 20%;
 }
 
-.number {
+.number,
+.description {
     margin-bottom: 20px;
 }

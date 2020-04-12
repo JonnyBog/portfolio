@@ -39,9 +39,11 @@ export default () => {
     return (
         <div className={styles.contact}>
             <Wrapper>
-                <Text style={Text.styles.large} dataId="description">
-                    {contact.acf.description}
-                </Text>
+                <div className={styles.description}>
+                    <Text style={Text.styles.large} dataId="description">
+                        {contact.acf.description}
+                    </Text>
+                </div>
                 <div className={styles.number}>
                     <Text style={Text.styles.medium} dataId="number">
                         <Link to={`tel:${contact.acf.number}`} isAnchor>

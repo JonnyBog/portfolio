@@ -12,23 +12,34 @@ import rootReducer from './reducers';
 
 configure({ adapter: new Adapter() });
 
-export const setupTestComponent = ({ render } = {}) => ({ props } = {}) => ({
-    wrapper: mount(
-        <MemoryRouter>{React.cloneElement(render(), props)}</MemoryRouter>
-    )
-});
+export const setupTestComponent = ({
+    render: baseRender,
+    props: baseProps
+} = {}) => ({ render: testRender, props: testProps } = {}) => {
+    const render = testRender || baseRender;
+    const props = testProps || baseProps;
+    return {
+        wrapper: mount(
+            <MemoryRouter>{React.cloneElement(render(), props)}</MemoryRouter>
+        )
+    };
+};
 
 export const setupTestProvider = ({
-    render,
+    render: baseRender,
     prerender: basePrerender = () => {},
     path: basePath,
-    initialEntries: baseInitialEntries
+    initialEntries: baseInitialEntries,
+    props: baseProps
 } = {}) => ({
-    props,
+    render: testRender,
+    props: testProps,
     prerender: testPrerender = () => {},
     path: testPath,
     initialEntries: testInitialEntries
 } = {}) => {
+    const render = testRender || baseRender;
+    const props = testProps || baseProps;
     const store = createStore(rootReducer, {}, compose(applyMiddleware(thunk)));
     let history;
     basePrerender(store);
