@@ -9,23 +9,28 @@ import styles from './index.module.css';
 const Header = () => (
     <header className={styles.header} data-qa="header">
         <div className={styles.nameDescription}>
-            <div className={styles.name}>
-                <Text
-                    element={Text.elements.span}
-                    style={Text.styles.large}
-                    dataId="name-link"
-                >
-                    <Link to={routes.home}>Jonny Boggon</Link>
+            <Link to={routes.home} dataId="name-link">
+                <div className={styles.name}>
+                    <Text
+                        element={Text.elements.span}
+                        style={Text.styles.large}
+                        dataId="name"
+                    >
+                        Jonny Boggon
+                    </Text>
+                </div>
+                <Text dataId="job-description" element={Text.elements.span}>
+                    Frontend Developer
                 </Text>
-            </div>
-            <Text dataId="job-description" element={Text.elements.span}>
-                Frontend Developer
-            </Text>
+            </Link>
         </div>
+
         <div className={styles.nav}>
             <div className={styles.navLink}>
-                <Text element={Text.elements.div} dataId="contact-link">
-                    <Link to={routes.contact}>Contact</Link>
+                <Text element={Text.elements.div}>
+                    <Link to={routes.contact} dataId="contact-link">
+                        Contact
+                    </Link>
                 </Text>
             </div>
         </div>

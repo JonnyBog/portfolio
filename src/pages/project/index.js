@@ -92,13 +92,20 @@ export default () => {
                                 Tools used: {tools}
                             </Text>
                         </div>
-                        <div className={styles.link}>
-                            <Text>
-                                <Link to={project_link.url} isAnchor isExternal>
-                                    {project_link.title}
-                                </Link>
-                            </Text>
-                        </div>
+
+                        {project_link && (
+                            <div className={styles.link}>
+                                <Text>
+                                    <Link
+                                        to={project_link.url}
+                                        isAnchor
+                                        isExternal
+                                    >
+                                        {project_link.title}
+                                    </Link>
+                                </Text>
+                            </div>
+                        )}
                     </Tiles.Tile>
                 </Tiles>
             </Wrapper>

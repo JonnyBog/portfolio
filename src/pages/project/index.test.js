@@ -16,6 +16,8 @@ import Project from '.';
 
 jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
 
+const projectResponse = projectsResponse[0];
+
 const setupTest = setupTestProvider({
     render: () => <Project />
 });
@@ -98,7 +100,6 @@ describe('Pages: Project', () => {
 
         describe('Project components', () => {
             const { wrapper } = setupTestSuccess();
-            const projectResponse = projectsResponse[0];
 
             it('renders the title', () => {
                 expect(wrapper.find('h1[data-id="title"]')).toHaveText(
@@ -150,6 +151,28 @@ describe('Pages: Project', () => {
                     'href',
                     projectResponse.acf.project_link.url
                 );
+            });
+        });
+
+        describe('Success missing data', () => {
+            it('does not render the link when there is not one', () => {
+                const { wrapper } = setupTest({
+                    prerender: ({ dispatch }) => {
+                        dispatch({
+                            type: FETCH_PROJECTS_SUCCESS,
+                            data: [
+                                {
+                                    ...projectResponse,
+                                    acf: {
+                                        ...projectResponse.acf,
+                                        project_link: null
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                });
+                expect(wrapper.find('a')).not.toExist();
             });
         });
     });

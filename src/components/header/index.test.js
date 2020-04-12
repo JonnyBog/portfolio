@@ -18,9 +18,7 @@ describe('Components: Header', () => {
 
     it('should render name anchor with correct text as span', () => {
         const { wrapper } = setupTest();
-        expect(wrapper.find('span[data-id="name-link"]')).toHaveText(
-            'Jonny Boggon'
-        );
+        expect(wrapper.find('span[data-id="name"]')).toHaveText('Jonny Boggon');
     });
 
     it('should push to home when name link is clicked', () => {
@@ -41,9 +39,9 @@ describe('Components: Header', () => {
         expect(history.location.pathname).toBe(routes.contact);
     });
 
-    it('should render job description with correct text as p', () => {
+    it('should render job description with correct text as span', () => {
         const { wrapper } = setupTest();
-        expect(wrapper.find('p[data-id="job-description"]')).toHaveText(
+        expect(wrapper.find('span[data-id="job-description"]')).toHaveText(
             'Frontend Developer'
         );
     });
