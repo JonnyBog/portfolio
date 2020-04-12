@@ -10,6 +10,7 @@ import ErrorMessage from '../../components/error-message';
 import Wrapper from '../../components/wrapper';
 
 import { requestHome } from '../../redux/home/actions';
+import homeSelectors from '../../redux/home/selectors';
 import { requestProjects, resetProjects } from '../../redux/projects/actions';
 
 import { routes } from '../../lib/constants';
@@ -18,12 +19,12 @@ import styles from './index.module.css';
 
 export default () => {
     const dispatch = useDispatch();
+    const { description, heading } = useSelector(homeSelectors.getSimple);
     const {
         isInitial: isHomeInitial,
         isPending: isHomePending,
-        hasError: hasHomeError,
-        data: home
-    } = useSelector((state) => state.home);
+        hasError: hasHomeError
+    } = useSelector(homeSelectors.getPredicate);
     const {
         isInitial: isProjectsInitial,
         isPending: isProjectsPending,
@@ -64,7 +65,7 @@ export default () => {
         <Wrapper>
             <div className={styles.description}>
                 <Text style={Text.styles.medium} dataId="description">
-                    {home.acf.description}
+                    {description}
                 </Text>
             </div>
 
@@ -74,7 +75,7 @@ export default () => {
                     style={Text.styles.large}
                     dataId="page-heading"
                 >
-                    {home.acf.heading}
+                    {heading}
                 </Text>
             </div>
 
