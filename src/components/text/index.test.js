@@ -52,6 +52,15 @@ describe('Components: Text', () => {
         );
     });
 
+    it('renders Text with data-id', () => {
+        const { wrapper } = setupTestWithString({
+            props: {
+                dataId: 'my-text'
+            }
+        });
+        expect(wrapper.find('[data-id="my-text"]')).toExist();
+    });
+
     it.each(Object.values(Text.elements))(
         'renders the element: %p when it is passed as a prop',
         (element) => {

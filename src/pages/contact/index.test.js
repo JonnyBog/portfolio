@@ -60,7 +60,7 @@ describe('Pages: Contact', () => {
     });
 
     describe('Actions', () => {
-        it('should call requestContact', () => {
+        it('should call requestContact on mount', () => {
             setupTest();
             expect(contactActions.requestContact).toHaveBeenCalled();
         });

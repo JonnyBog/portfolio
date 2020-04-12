@@ -31,11 +31,3 @@
     margin: 0 10px;
     cursor: pointer;
 }
-
-.navList {
-    padding: 0;
-    list-style: none;
-    margin: 0;
-    display: flex;
-    justify-content: flex-end;
-}

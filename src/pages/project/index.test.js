@@ -15,6 +15,7 @@ import { routes } from '../../lib/constants';
 import Project from '.';
 
 jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
+jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
 
 const projectResponse = projectsResponse[0];
 
@@ -81,13 +82,20 @@ describe('Pages: Project', () => {
     });
 
     describe('Actions', () => {
-        it('should call requestProjects with the slug from the url', () => {
+        it('should call requestProjects with the slug from the url on mount', () => {
             const slug = 'test';
             setupTest({
                 path: `${routes.project}/:slug`,
                 initialEntries: [`${routes.project}/${slug}`]
             });
             expect(projectsActions.requestProjects).toHaveBeenCalledWith(slug);
+        });
+
+        it('should call resetProjects on unmount', () => {
+            const { wrapper } = setupTest();
+            wrapper.unmount();
+
+            expect(projectsActions.resetProjects).toHaveBeenCalled();
         });
     });
 
@@ -150,6 +158,9 @@ describe('Pages: Project', () => {
                 expect(wrapper.find('a')).toHaveProp(
                     'href',
                     projectResponse.acf.project_link.url
+                );
+                expect(wrapper.find('a')).toHaveText(
+                    projectResponse.acf.project_link.text
                 );
             });
         });

@@ -10,7 +10,7 @@ import Text from '../../components/text';
 import Tiles from '../../components/tiles';
 import Wrapper from '../../components/wrapper';
 
-import { requestProjects } from '../../actions/projects-actions';
+import { requestProjects, resetProjects } from '../../actions/projects-actions';
 
 import styles from './index.module.css';
 
@@ -28,6 +28,13 @@ export default () => {
     useEffect(() => {
         dispatch(requestProjects(slug));
     }, [dispatch, slug]);
+
+    useEffect(
+        () => () => {
+            dispatch(resetProjects());
+        },
+        [dispatch]
+    );
 
     if (
         hasProjectsError ||
@@ -49,66 +56,56 @@ export default () => {
     const { sizes } = image;
 
     return (
-        <div className={styles.project}>
-            <Wrapper>
-                <Tiles>
-                    <Tiles.Tile>
-                        <div className={styles.title}>
-                            <Text
-                                element={Text.elements.h1}
-                                style={Text.styles.large}
-                                dataId="title"
-                            >
-                                {titleRendered}
-                            </Text>
-                        </div>
-                        <div className={styles.img}>
-                            <Image
-                                src={sizes.medium_large}
-                                alt={titleRendered}
-                                sources={[
-                                    {
-                                        srcSet: sizes['1536x1536'],
-                                        width: sizes['medium_large-width']
-                                    },
-                                    {
-                                        srcSet:
-                                            sizes['twentytwenty-fullscreen'],
-                                        width: sizes['1536x1536-width']
-                                    }
-                                ]}
-                            />
-                        </div>
-                        <div className={styles.created}>
-                            <Text
-                                style={Text.styles.medium}
-                                dataId="created-width"
-                            >
-                                Built at: {created_with}
-                            </Text>
-                        </div>
-                        <div className={styles.tools}>
-                            <Text style={Text.styles.medium} dataId="tools">
-                                Tools used: {tools}
-                            </Text>
-                        </div>
+        <Wrapper>
+            <Tiles>
+                <Tiles.Tile>
+                    <div className={styles.title}>
+                        <Text
+                            element={Text.elements.h1}
+                            style={Text.styles.large}
+                            dataId="title"
+                        >
+                            {titleRendered}
+                        </Text>
+                    </div>
+                    <div className={styles.img}>
+                        <Image
+                            src={sizes.medium_large}
+                            alt={titleRendered}
+                            sources={[
+                                {
+                                    srcSet: sizes['1536x1536'],
+                                    width: sizes['medium_large-width']
+                                },
+                                {
+                                    srcSet: sizes['twentytwenty-fullscreen'],
+                                    width: sizes['1536x1536-width']
+                                }
+                            ]}
+                        />
+                    </div>
+                    <div className={styles.created}>
+                        <Text style={Text.styles.medium} dataId="created-width">
+                            Built at: {created_with}
+                        </Text>
+                    </div>
+                    <div className={styles.tools}>
+                        <Text style={Text.styles.medium} dataId="tools">
+                            Tools used: {tools}
+                        </Text>
+                    </div>
 
-                        {project_link && (
-                            <div className={styles.link}>
-                                <Text>
-                                    <Link
-                                        to={project_link.url}
-                                        isAnchor
-                                        isExternal
-                                    >
-                                        {project_link.title}
-                                    </Link>
-                                </Text>
-                            </div>
-                        )}
-                    </Tiles.Tile>
-                </Tiles>
-            </Wrapper>
-        </div>
+                    {project_link && (
+                        <div className={styles.link}>
+                            <Text element={Text.elements.div}>
+                                <Link to={project_link.url} isAnchor isExternal>
+                                    {project_link.title}
+                                </Link>
+                            </Text>
+                        </div>
+                    )}
+                </Tiles.Tile>
+            </Tiles>
+        </Wrapper>
     );
 };

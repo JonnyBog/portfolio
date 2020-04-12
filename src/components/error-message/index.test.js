@@ -11,7 +11,7 @@ describe('Components: ErrorMessage', () => {
     it('renders correct className on ErrorMessage', () => {
         const { wrapper } = setupTest();
         expect(wrapper.find('[data-qa="error-message"]')).toHaveClassName(
-            'error-message'
+            'errorMessage'
         );
     });
 

@@ -10,6 +10,15 @@ const Tile = ({ children, dataId }) => (
     </div>
 );
 
+Tile.propTypes = {
+    children: PropTypes.node.isRequired,
+    dataId: PropTypes.string
+};
+
+Tile.defaultProps = {
+    dataId: null
+};
+
 const Tiles = ({ children }) => (
     <div
         className={cx(styles.tiles, {
@@ -22,15 +31,6 @@ const Tiles = ({ children }) => (
 );
 
 Tiles.Tile = Tile;
-
-Tile.propTypes = {
-    children: PropTypes.node.isRequired,
-    dataId: PropTypes.string
-};
-
-Tile.defaultProps = {
-    dataId: null
-};
 
 Tiles.propTypes = {
     children: PropTypes.node.isRequired

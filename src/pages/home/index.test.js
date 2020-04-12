@@ -20,6 +20,7 @@ import Home from '.';
 
 jest.spyOn(homeActions, 'requestHome').mockReturnValue(jest.fn());
 jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
+jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
 
 const setupTest = setupTestProvider({
     render: () => <Home />
@@ -51,7 +52,7 @@ describe('Pages: Home', () => {
                 prerender: ({ dispatch }) => {
                     dispatch({
                         type: FETCH_PROJECTS_SUCCESS,
-                        data: projectsResponse
+                        data: []
                     });
                 }
             });
@@ -66,7 +67,19 @@ describe('Pages: Home', () => {
                     });
                     dispatch({
                         type: FETCH_PROJECTS_SUCCESS,
-                        data: projectsResponse
+                        data: []
+                    });
+                }
+            });
+            expect(wrapper.find('[data-qa="loader"]')).toExist();
+        });
+
+        it('renders the loader when projects is initial', () => {
+            const { wrapper } = setupTest({
+                prerender: ({ dispatch }) => {
+                    dispatch({
+                        type: FETCH_HOME_SUCCESS,
+                        data: []
                     });
                 }
             });
@@ -77,11 +90,11 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_HOME
+                        type: FETCH_HOME_SUCCESS,
+                        data: []
                     });
                     dispatch({
-                        type: FETCH_PROJECTS,
-                        data: projectsResponse
+                        type: FETCH_PROJECTS
                     });
                 }
             });
@@ -118,14 +131,21 @@ describe('Pages: Home', () => {
     });
 
     describe('Actions', () => {
-        it('should call requestHome', () => {
+        it('should call requestHome on mount', () => {
             setupTest();
             expect(homeActions.requestHome).toHaveBeenCalled();
         });
 
-        it('should call requestProjects', () => {
+        it('should call requestProjects on mount', () => {
             setupTest();
             expect(projectsActions.requestProjects).toHaveBeenCalled();
+        });
+
+        it('should call resetProjects on unmount', () => {
+            const { wrapper } = setupTest();
+            wrapper.unmount();
+
+            expect(projectsActions.resetProjects).toHaveBeenCalled();
         });
     });
 

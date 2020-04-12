@@ -10,7 +10,7 @@ import ErrorMessage from '../../components/error-message';
 import Wrapper from '../../components/wrapper';
 
 import { requestHome } from '../../actions/home-actions';
-import { requestProjects } from '../../actions/projects-actions';
+import { requestProjects, resetProjects } from '../../actions/projects-actions';
 
 import { routes } from '../../lib/constants';
 
@@ -35,6 +35,13 @@ export default () => {
         dispatch(requestHome());
         dispatch(requestProjects());
     }, [dispatch]);
+
+    useEffect(
+        () => () => {
+            dispatch(resetProjects());
+        },
+        [dispatch]
+    );
 
     if (hasHomeError || hasProjectsError) {
         return (
@@ -76,8 +83,12 @@ export default () => {
                     const titleRendered = title.rendered;
 
                     return (
-                        <Link to={`${routes.project}/${slug}`} key={slug}>
-                            <Tiles.Tile dataId={slug}>
+                        <Link
+                            to={`${routes.project}/${slug}`}
+                            key={slug}
+                            dataId={slug}
+                        >
+                            <Tiles.Tile>
                                 <div className={styles.projectImg}>
                                     <Image
                                         src={acf.image.sizes.medium_large}
