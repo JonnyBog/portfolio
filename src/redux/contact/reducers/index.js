@@ -1,8 +1,8 @@
 import {
-    FETCH_HOME,
-    FETCH_HOME_SUCCESS,
-    FETCH_HOME_ERROR
-} from '../../actions/home-actions/types';
+    FETCH_CONTACT,
+    FETCH_CONTACT_SUCCESS,
+    FETCH_CONTACT_ERROR
+} from '../types';
 
 export const initialState = {
     isInitial: true,
@@ -11,22 +11,22 @@ export const initialState = {
     hasError: false
 };
 
-function home(state = initialState, { type, data }) {
+function contact(state = initialState, { type, data }) {
     switch (type) {
-        case FETCH_HOME:
+        case FETCH_CONTACT:
             return {
                 ...state,
                 isPending: true,
                 isInitial: false
             };
-        case FETCH_HOME_SUCCESS:
+        case FETCH_CONTACT_SUCCESS:
             return {
                 ...state,
                 isInitial: false,
                 isPending: false,
                 data: data[0]
             };
-        case FETCH_HOME_ERROR:
+        case FETCH_CONTACT_ERROR:
             return {
                 ...state,
                 isInitial: false,
@@ -38,4 +38,4 @@ function home(state = initialState, { type, data }) {
     }
 }
 
-export default home;
+export default contact;

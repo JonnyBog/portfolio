@@ -3,7 +3,7 @@ import {
     FETCH_PROJECTS_SUCCESS,
     FETCH_PROJECTS_ERROR,
     RESET_PROJECTS
-} from '../../actions/projects-actions/types';
+} from '../types';
 import projectsReducer, { initialState } from '.';
 
 describe('Reducers: Projects', () => {

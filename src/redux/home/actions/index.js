@@ -1,5 +1,5 @@
-import { api, prependRequest } from '../../lib/constants';
-import { FETCH_HOME, FETCH_HOME_SUCCESS, FETCH_HOME_ERROR } from './types';
+import { api, prependRequest } from '../../../lib/constants';
+import { FETCH_HOME, FETCH_HOME_SUCCESS, FETCH_HOME_ERROR } from '../types';
 
 function fetchHome() {
     return {

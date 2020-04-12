@@ -10,7 +10,7 @@ import Text from '../../components/text';
 import Tiles from '../../components/tiles';
 import Wrapper from '../../components/wrapper';
 
-import { requestProjects, resetProjects } from '../../actions/projects-actions';
+import { requestProjects, resetProjects } from '../../redux/projects/actions';
 
 import styles from './index.module.css';
 

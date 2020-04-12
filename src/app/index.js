@@ -10,7 +10,7 @@ import Home from '../pages/home';
 import Project from '../pages/project';
 
 import { routes } from '../lib/constants';
-import rootReducer from '../reducers';
+import rootReducer from '../redux/reducers';
 
 import styles from './index.module.css';
 

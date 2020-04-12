@@ -1,10 +1,10 @@
-import { api, prependRequest } from '../../lib/constants';
+import { api, prependRequest } from '../../../lib/constants';
 
 import {
     FETCH_CONTACT,
     FETCH_CONTACT_SUCCESS,
     FETCH_CONTACT_ERROR
-} from './types';
+} from '../types';
 
 function fetchContact() {
     return {

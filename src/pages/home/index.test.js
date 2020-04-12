@@ -1,18 +1,18 @@
 import React from 'react';
 
 import { setupTestProvider } from '../../setupTests';
-import * as homeActions from '../../actions/home-actions';
-import * as projectsActions from '../../actions/projects-actions';
+import * as homeActions from '../../redux/home/actions';
+import * as projectsActions from '../../redux/projects/actions';
 import {
     FETCH_HOME,
     FETCH_HOME_SUCCESS,
     FETCH_HOME_ERROR
-} from '../../actions/home-actions/types';
+} from '../../redux/home/types';
 import {
     FETCH_PROJECTS,
     FETCH_PROJECTS_SUCCESS,
     FETCH_PROJECTS_ERROR
-} from '../../actions/projects-actions/types';
+} from '../../redux/projects/types';
 import homeResponse from '../../test-resources/home-response';
 import projectsResponse from '../../test-resources/projects-response';
 import { routes } from '../../lib/constants';

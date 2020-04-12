@@ -9,8 +9,8 @@ import Loader from '../../components/loader';
 import ErrorMessage from '../../components/error-message';
 import Wrapper from '../../components/wrapper';
 
-import { requestHome } from '../../actions/home-actions';
-import { requestProjects, resetProjects } from '../../actions/projects-actions';
+import { requestHome } from '../../redux/home/actions';
+import { requestProjects, resetProjects } from '../../redux/projects/actions';
 
 import { routes } from '../../lib/constants';
 

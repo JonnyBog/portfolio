@@ -7,7 +7,7 @@ import {
     FETCH_PROJECTS_SUCCESS,
     FETCH_PROJECTS_ERROR,
     RESET_PROJECTS
-} from './types';
+} from '../types';
 
 import { requestProjects, getRequestProjectsApi, resetProjects } from '.';
 

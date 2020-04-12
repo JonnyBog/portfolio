@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { setupTestProvider } from '../../setupTests';
-import * as contactActions from '../../actions/contact-actions';
+import * as contactActions from '../../redux/contact/actions';
 
 import {
     FETCH_CONTACT,
     FETCH_CONTACT_SUCCESS,
     FETCH_CONTACT_ERROR
-} from '../../actions/contact-actions/types';
+} from '../../redux/contact/types';
 
 import contactResponse from '../../test-resources/contact-response';
 

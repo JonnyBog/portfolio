@@ -7,7 +7,7 @@ import Link from '../../components/link';
 import Text from '../../components/text';
 import Wrapper from '../../components/wrapper';
 
-import { requestContact } from '../../actions/contact-actions';
+import { requestContact } from '../../redux/contact/actions';
 
 import styles from './index.module.css';
 

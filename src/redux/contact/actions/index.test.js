@@ -6,8 +6,7 @@ import {
     FETCH_CONTACT,
     FETCH_CONTACT_SUCCESS,
     FETCH_CONTACT_ERROR
-} from './types';
-
+} from '../types';
 import { requestContact, requestContactApi } from '.';
 
 describe('Actions: contact', () => {

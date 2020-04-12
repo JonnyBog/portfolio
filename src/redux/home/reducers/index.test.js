@@ -1,8 +1,4 @@
-import {
-    FETCH_HOME,
-    FETCH_HOME_SUCCESS,
-    FETCH_HOME_ERROR
-} from '../../actions/home-actions/types';
+import { FETCH_HOME, FETCH_HOME_SUCCESS, FETCH_HOME_ERROR } from '../types';
 import homeReducer, { initialState } from '.';
 
 describe('Reducers: Home', () => {

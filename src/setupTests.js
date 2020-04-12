@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import 'jest-enzyme';
 
-import rootReducer from './reducers';
+import rootReducer from './redux/reducers';
 
 configure({ adapter: new Adapter() });
 

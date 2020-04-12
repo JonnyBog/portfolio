@@ -1,10 +1,10 @@
-import { api, prependRequest } from '../../lib/constants';
+import { api, prependRequest } from '../../../lib/constants';
 import {
     FETCH_PROJECTS,
     FETCH_PROJECTS_SUCCESS,
     FETCH_PROJECTS_ERROR,
     RESET_PROJECTS
-} from './types';
+} from '../types';
 
 function fetchProjects() {
     return {
