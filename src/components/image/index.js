@@ -26,7 +26,7 @@ const Image = ({ src: srcRaw, alt, sources, dataId }) => {
     const src = useImage(srcRaw);
 
     return (
-        <picture data-qa="image" data-id={dataId} className={styles.picture}>
+        <picture data-qa="image" data-id={dataId}>
             {sources.map(({ srcSet, width }) => (
                 <Source srcSet={srcSet} width={width} key={srcSet} />
             ))}

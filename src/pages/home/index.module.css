@@ -13,5 +13,22 @@
 }
 
 .projectImg {
+    position: relative;
     margin-bottom: 15px;
+}
+
+.projectImg:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    transition: all 0.5s;
+}
+
+.project:hover .projectImg:before {
+    opacity: 0;
 }

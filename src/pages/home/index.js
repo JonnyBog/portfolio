@@ -87,37 +87,38 @@ export default () => {
                     const titleRendered = title.rendered;
 
                     return (
-                        <Link
-                            to={`${routes.project}/${slug}`}
-                            key={slug}
-                            dataId={slug}
-                        >
-                            <Tiles.Tile>
-                                <div className={styles.projectImg}>
-                                    <Image
-                                        src={acf.image.sizes.medium_large}
-                                        alt={titleRendered}
-                                        sources={[
-                                            {
-                                                srcSet:
-                                                    acf.image.sizes[
-                                                        'post-thumbnail'
-                                                    ],
-                                                width:
-                                                    acf.image.sizes[
-                                                        'medium_large-width'
-                                                    ]
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                                <div className={styles.projectTitle}>
-                                    <Text style={Text.styles.medium}>
-                                        {titleRendered}
-                                    </Text>
-                                </div>
-                            </Tiles.Tile>
-                        </Link>
+                        <div className={styles.project} key={slug}>
+                            <Link
+                                to={`${routes.project}/${slug}`}
+                                dataId={slug}
+                            >
+                                <Tiles.Tile>
+                                    <div className={styles.projectImg}>
+                                        <Image
+                                            src={acf.image.sizes.medium_large}
+                                            alt={titleRendered}
+                                            sources={[
+                                                {
+                                                    srcSet:
+                                                        acf.image.sizes[
+                                                            'post-thumbnail'
+                                                        ],
+                                                    width:
+                                                        acf.image.sizes[
+                                                            'medium_large-width'
+                                                        ]
+                                                }
+                                            ]}
+                                        />
+                                    </div>
+                                    <div className={styles.projectTitle}>
+                                        <Text style={Text.styles.medium}>
+                                            {titleRendered}
+                                        </Text>
+                                    </div>
+                                </Tiles.Tile>
+                            </Link>
+                        </div>
                     );
                 })}
             </Tiles>
