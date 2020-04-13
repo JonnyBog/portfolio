@@ -2,7 +2,7 @@ import getPredicateHelper from '../../../lib/helpers/get-predicate';
 
 import selectors from '.';
 
-describe('Selectors: home', () => {
+describe('Selectors: contact', () => {
     describe('getPredicate', () => {
         it('returns the default state', () => {
             expect(selectors.getPredicate()).toEqual(getPredicateHelper());
@@ -11,7 +11,7 @@ describe('Selectors: home', () => {
         it('returns the correct state', () => {
             expect(
                 selectors.getPredicate({
-                    home: {
+                    contact: {
                         isInitial: 'isInitial',
                         isPending: 'isPending',
                         hasError: 'hasError'
@@ -29,35 +29,15 @@ describe('Selectors: home', () => {
     });
 
     describe('getSimple', () => {
-        describe('heading', () => {
-            it('returns the default state', () => {
-                expect(selectors.getSimple().heading).toBeUndefined();
-            });
-
-            it('returns the correct state', () => {
-                expect(
-                    selectors.getSimple({
-                        home: {
-                            data: {
-                                acf: {
-                                    heading: 'test'
-                                }
-                            }
-                        }
-                    }).heading
-                ).toEqual('test');
-            });
-        });
-
         describe('description', () => {
             it('returns the default state', () => {
-                expect(selectors.getSimple().heading).toBeUndefined();
+                expect(selectors.getSimple().description).toBeUndefined();
             });
 
             it('returns the correct state', () => {
                 expect(
                     selectors.getSimple({
-                        home: {
+                        contact: {
                             data: {
                                 acf: {
                                     description: 'test'
@@ -65,6 +45,46 @@ describe('Selectors: home', () => {
                             }
                         }
                     }).description
+                ).toEqual('test');
+            });
+        });
+
+        describe('number', () => {
+            it('returns the default state', () => {
+                expect(selectors.getSimple().number).toBeUndefined();
+            });
+
+            it('returns the correct state', () => {
+                expect(
+                    selectors.getSimple({
+                        contact: {
+                            data: {
+                                acf: {
+                                    number: 'test'
+                                }
+                            }
+                        }
+                    }).number
+                ).toEqual('test');
+            });
+        });
+
+        describe('email', () => {
+            it('returns the default state', () => {
+                expect(selectors.getSimple().email).toBeUndefined();
+            });
+
+            it('returns the correct state', () => {
+                expect(
+                    selectors.getSimple({
+                        contact: {
+                            data: {
+                                acf: {
+                                    email: 'test'
+                                }
+                            }
+                        }
+                    }).email
                 ).toEqual('test');
             });
         });

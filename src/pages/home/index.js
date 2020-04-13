@@ -12,6 +12,7 @@ import Wrapper from '../../components/wrapper';
 import { requestHome } from '../../redux/home/actions';
 import homeSelectors from '../../redux/home/selectors';
 import { requestProjects, resetProjects } from '../../redux/projects/actions';
+import projectsSelectors from '../../redux/projects/selectors';
 
 import { routes } from '../../lib/constants';
 
@@ -19,18 +20,6 @@ import styles from './index.module.css';
 
 export default () => {
     const dispatch = useDispatch();
-    const { description, heading } = useSelector(homeSelectors.getSimple);
-    const {
-        isInitial: isHomeInitial,
-        isPending: isHomePending,
-        hasError: hasHomeError
-    } = useSelector(homeSelectors.getPredicate);
-    const {
-        isInitial: isProjectsInitial,
-        isPending: isProjectsPending,
-        hasError: hasProjectsError,
-        data: projects
-    } = useSelector((state) => state.projects);
 
     useEffect(() => {
         dispatch(requestHome());
@@ -43,6 +32,20 @@ export default () => {
         },
         [dispatch]
     );
+
+    const {
+        isInitial: isHomeInitial,
+        isPending: isHomePending,
+        hasError: hasHomeError
+    } = useSelector(homeSelectors.getPredicate);
+    const { description, heading } = useSelector(homeSelectors.getSimple);
+
+    const {
+        isInitial: isProjectsInitial,
+        isPending: isProjectsPending,
+        hasError: hasProjectsError
+    } = useSelector(projectsSelectors.getPredicate);
+    const projects = useSelector(projectsSelectors.getProjects);
 
     if (hasHomeError || hasProjectsError) {
         return (

@@ -11,20 +11,14 @@ import Tiles from '../../components/tiles';
 import Wrapper from '../../components/wrapper';
 
 import { requestProjects, resetProjects } from '../../redux/projects/actions';
+import projectsSelectors from '../../redux/projects/selectors';
 
 import styles from './index.module.css';
 
 export default () => {
     const dispatch = useDispatch();
-    const {
-        isInitial: isProjectsInitial,
-        isPending: isProjectsPending,
-        hasError: hasProjectsError,
-        data
-    } = useSelector((state) => state.projects);
-    const { slug } = useParams();
-    const project = data[0];
 
+    const { slug } = useParams();
     useEffect(() => {
         dispatch(requestProjects(slug));
     }, [dispatch, slug]);
@@ -35,6 +29,14 @@ export default () => {
         },
         [dispatch]
     );
+
+    const {
+        isInitial: isProjectsInitial,
+        isPending: isProjectsPending,
+        hasError: hasProjectsError
+    } = useSelector(projectsSelectors.getPredicate);
+    const projects = useSelector(projectsSelectors.getProjects);
+    const project = projects[0];
 
     if (
         hasProjectsError ||
