@@ -99,11 +99,11 @@ export default () => {
 
                     {project_link && (
                         <div className={styles.link}>
-                            <Text element={Text.elements.div}>
-                                <Link to={project_link.url} isAnchor isExternal>
+                            <Link to={project_link.url} isAnchor isExternal>
+                                <Text element={Text.elements.div}>
                                     {project_link.title}
-                                </Link>
-                            </Text>
+                                </Text>
+                            </Link>
                         </div>
                     )}
                 </Tiles.Tile>

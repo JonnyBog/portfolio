@@ -13,18 +13,17 @@
     margin-bottom: 15px;
 }
 
-.link a {
-    padding: 10px;
-    background: #000;
-    border: 1px solid #e6eaea;
+.link {
+    border: 1px solid #000;
     max-width: 100px;
     margin: auto;
-    color: #fff;
     transition: all 0.5s;
 }
 
-.link a:hover {
+.link:hover {
     background: #e6eaea;
-    border: 1px solid #000;
-    color: #000;
+}
+
+.link a {
+    padding: 10px;
 }
