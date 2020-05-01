@@ -1,6 +1,6 @@
 # Jonny Boggon - portfolio
 
-A React app showcasing the websites I have built. The app: [https://jonnybog.github.io/portfolio](https://jonnybog.github.io/portfolio)
+A React app showcasing the websites and apps I have helped build. The app: [https://jonnybog.github.io/portfolio](https://jonnybog.github.io/portfolio)
 
 ## Available Scripts
 
