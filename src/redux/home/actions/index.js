@@ -1,4 +1,4 @@
-import { api, prependRequest } from '../../../lib/constants';
+import { api } from '../../../lib/constants';
 import { FETCH_HOME, FETCH_HOME_SUCCESS, FETCH_HOME_ERROR } from '../types';
 
 function fetchHome() {
@@ -20,7 +20,7 @@ function fetchHomeError() {
     };
 }
 
-export const requestHomeApi = `${prependRequest}${api}/pages?slug=home&_fields=acf`;
+export const requestHomeApi = `${api}/pages?slug=home&_fields=acf`;
 
 export function requestHome() {
     return (dispatch) => {

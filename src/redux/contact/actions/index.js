@@ -1,4 +1,4 @@
-import { api, prependRequest } from '../../../lib/constants';
+import { api } from '../../../lib/constants';
 
 import {
     FETCH_CONTACT,
@@ -25,7 +25,7 @@ function fetchContactError() {
     };
 }
 
-export const requestContactApi = `${prependRequest}${api}/pages?slug=contact&_fields=acf`;
+export const requestContactApi = `${api}/pages?slug=jonny-contact&_fields=acf`;
 
 export function requestContact() {
     return (dispatch) => {

@@ -1,13 +1,10 @@
 import React from 'react';
 
 import { setupTestComponent } from '../../setupTests';
-import useImage from '../../hooks/use-image';
 import Image from '.';
 
-jest.mock('../../hooks/use-image');
-
 const requiredProps = {
-    src: 'src',
+    src: 'test.png',
     alt: 'alt'
 };
 
@@ -20,22 +17,13 @@ describe('Components: Image', () => {
         jest.clearAllMocks();
         jest.restoreAllMocks();
     });
-    it('renders an image with placeholder src on render', () => {
-        useImage.mockImplementation(
-            require.requireActual('../../hooks/use-image').default
-        );
-        const { wrapper } = setupTest();
-        expect(wrapper.find('img')).toHaveProp('src', 'placeholder.png');
-    });
 
     it('renders an image with correct data-src', () => {
-        useImage.mockImplementation(() => 'test.png');
         const { wrapper } = setupTest();
-        expect(wrapper.find('img')).toHaveProp('data-src', 'src');
+        expect(wrapper.find('img')).toHaveProp('data-src', 'test.png');
     });
 
-    it('renders an image with correct image after the image has loaded', () => {
-        useImage.mockImplementation(() => 'test.png');
+    it('renders an image with correct image', () => {
         const { wrapper } = setupTest();
         expect(wrapper.find('img')).toHaveProp('src', 'test.png');
     });
@@ -45,10 +33,7 @@ describe('Components: Image', () => {
         expect(wrapper.find('img')).toHaveProp('alt', requiredProps.alt);
     });
 
-    it('renders sources with placeholder on render', () => {
-        useImage.mockImplementation(
-            require.requireActual('../../hooks/use-image').default
-        );
+    it('renders image with correct sources', () => {
         const { wrapper } = setupTest({
             props: {
                 sources: [
@@ -63,54 +48,12 @@ describe('Components: Image', () => {
                 ]
             }
         });
-        expect(wrapper.find('source').at(0)).toHaveProp(
-            'srcSet',
-            'placeholder.png'
-        );
+        expect(wrapper.find('source').at(0)).toHaveProp('srcSet', 'srcSet1');
         expect(wrapper.find('source').at(0)).toHaveProp(
             'media',
             '(min-width: 200px)'
         );
-        expect(wrapper.find('source').at(0)).toHaveProp(
-            'data-srcset',
-            'srcSet1'
-        );
-        expect(wrapper.find('source').at(1)).toHaveProp(
-            'srcSet',
-            'placeholder.png'
-        );
-        expect(wrapper.find('source').at(1)).toHaveProp(
-            'media',
-            '(min-width: 300px)'
-        );
-        expect(wrapper.find('source').at(1)).toHaveProp(
-            'data-srcset',
-            'srcSet2'
-        );
-    });
-
-    it('renders image with correct sources after the image has loaded', () => {
-        useImage.mockImplementation(() => 'test.png');
-        const { wrapper } = setupTest({
-            props: {
-                sources: [
-                    {
-                        srcSet: 'srcSet1',
-                        width: 200
-                    },
-                    {
-                        srcSet: 'srcSet2',
-                        width: 300
-                    }
-                ]
-            }
-        });
-        expect(wrapper.find('source').at(0)).toHaveProp('srcSet', 'test.png');
-        expect(wrapper.find('source').at(0)).toHaveProp(
-            'media',
-            '(min-width: 200px)'
-        );
-        expect(wrapper.find('source').at(1)).toHaveProp('srcSet', 'test.png');
+        expect(wrapper.find('source').at(1)).toHaveProp('srcSet', 'srcSet2');
         expect(wrapper.find('source').at(1)).toHaveProp(
             'media',
             '(min-width: 300px)'

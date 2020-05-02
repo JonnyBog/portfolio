@@ -1,4 +1,4 @@
-import { api, prependRequest } from '../../../lib/constants';
+import { api } from '../../../lib/constants';
 import {
     FETCH_PROJECTS,
     FETCH_PROJECTS_SUCCESS,
@@ -31,7 +31,7 @@ export function resetProjects() {
     };
 }
 
-const requestProjectsApi = `${prependRequest}${api}/project?_fields=title,acf,slug`;
+const requestProjectsApi = `${api}/jonny_project?_fields=title,acf,slug`;
 
 export const getRequestProjectsApi = (slug) =>
     slug ? `${requestProjectsApi}&slug=${slug}` : requestProjectsApi;
