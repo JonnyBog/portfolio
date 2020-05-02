@@ -51,7 +51,7 @@ describe('Selectors: home', () => {
 
         describe('description', () => {
             it('returns the default state', () => {
-                expect(selectors.getSimple().heading).toBeUndefined();
+                expect(selectors.getSimple().description).toBeUndefined();
             });
 
             it('returns the correct state', () => {
