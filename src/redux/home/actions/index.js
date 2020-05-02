@@ -20,7 +20,7 @@ function fetchHomeError() {
     };
 }
 
-export const requestHomeApi = `${api}/pages?slug=home&_fields=acf`;
+export const requestHomeApi = `${api}/pages?slug=jonny-home&_fields=acf`;
 
 export function requestHome() {
     return (dispatch) => {
