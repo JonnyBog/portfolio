@@ -1,26 +1,33 @@
 import React from 'react';
 
 import { setupTestProvider } from '../../setupTests';
-import * as homeActions from '../../redux/home/actions';
-import * as projectsActions from '../../redux/projects/actions';
+
+import { actions as homeActions, types as homeTypes } from '../../redux/home';
 import {
-    FETCH_HOME,
-    FETCH_HOME_SUCCESS,
-    FETCH_HOME_ERROR
-} from '../../redux/home/types';
-import {
-    FETCH_PROJECTS,
-    FETCH_PROJECTS_SUCCESS,
-    FETCH_PROJECTS_ERROR
-} from '../../redux/projects/types';
+    actions as projectsActions,
+    types as projectsTypes
+} from '../../redux/projects';
+
 import homeResponse from '../../test-resources/home-response';
 import projectsResponse from '../../test-resources/projects-response';
+
 import { routes } from '../../lib/constants';
 import Home from '.';
 
 jest.spyOn(homeActions, 'requestHome').mockReturnValue(jest.fn());
 jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
 jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
+
+const {
+    pending: homePending,
+    success: homeSuccess,
+    error: homeError
+} = homeTypes;
+const {
+    pending: projectsPending,
+    success: projectsSuccess,
+    error: projectsError
+} = projectsTypes;
 
 const setupTest = setupTestProvider({
     render: () => <Home />
@@ -30,11 +37,11 @@ const setupTestSuccess = setupTestProvider({
     render: () => <Home />,
     prerender: ({ dispatch }) => {
         dispatch({
-            type: FETCH_HOME_SUCCESS,
+            type: homeSuccess,
             data: homeResponse
         });
         dispatch({
-            type: FETCH_PROJECTS_SUCCESS,
+            type: projectsSuccess,
             data: projectsResponse
         });
     }
@@ -51,7 +58,7 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_PROJECTS_SUCCESS,
+                        type: projectsSuccess,
                         data: []
                     });
                 }
@@ -63,10 +70,10 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_HOME
+                        type: homePending
                     });
                     dispatch({
-                        type: FETCH_PROJECTS_SUCCESS,
+                        type: projectsSuccess,
                         data: []
                     });
                 }
@@ -78,7 +85,7 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_HOME_SUCCESS,
+                        type: homeSuccess,
                         data: []
                     });
                 }
@@ -90,11 +97,11 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_HOME_SUCCESS,
+                        type: homeSuccess,
                         data: []
                     });
                     dispatch({
-                        type: FETCH_PROJECTS
+                        type: projectsPending
                     });
                 }
             });
@@ -107,7 +114,7 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_HOME_ERROR
+                        type: homeError
                     });
                 }
             });
@@ -120,7 +127,7 @@ describe('Pages: Home', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_PROJECTS_ERROR
+                        type: projectsError
                     });
                 }
             });

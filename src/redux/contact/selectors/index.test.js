@@ -1,33 +1,6 @@
-import getPredicateHelper from '../../../lib/helpers/get-predicate';
-
 import selectors from '.';
 
 describe('Selectors: contact', () => {
-    describe('getPredicate', () => {
-        it('returns the default state', () => {
-            expect(selectors.getPredicate()).toEqual(getPredicateHelper());
-        });
-
-        it('returns the correct state', () => {
-            expect(
-                selectors.getPredicate({
-                    contact: {
-                        isInitial: 'isInitial',
-                        isPending: 'isPending',
-                        hasError: 'hasError'
-                    }
-                })
-            ).toEqual(
-                getPredicateHelper({
-                    isInitial: 'isInitial',
-                    isPending: 'isPending',
-                    hasError: 'hasError',
-                    data: ''
-                })
-            );
-        });
-    });
-
     describe('getSimple', () => {
         describe('description', () => {
             it('returns the default state', () => {
@@ -38,11 +11,13 @@ describe('Selectors: contact', () => {
                 expect(
                     selectors.getSimple({
                         contact: {
-                            data: {
-                                acf: {
-                                    description: 'test'
+                            data: [
+                                {
+                                    acf: {
+                                        description: 'test'
+                                    }
                                 }
-                            }
+                            ]
                         }
                     }).description
                 ).toEqual('test');
@@ -58,11 +33,13 @@ describe('Selectors: contact', () => {
                 expect(
                     selectors.getSimple({
                         contact: {
-                            data: {
-                                acf: {
-                                    number: 'test'
+                            data: [
+                                {
+                                    acf: {
+                                        number: 'test'
+                                    }
                                 }
-                            }
+                            ]
                         }
                     }).number
                 ).toEqual('test');
@@ -78,11 +55,13 @@ describe('Selectors: contact', () => {
                 expect(
                     selectors.getSimple({
                         contact: {
-                            data: {
-                                acf: {
-                                    email: 'test'
+                            data: [
+                                {
+                                    acf: {
+                                        email: 'test'
+                                    }
                                 }
-                            }
+                            ]
                         }
                     }).email
                 ).toEqual('test');

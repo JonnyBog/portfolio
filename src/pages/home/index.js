@@ -9,10 +9,14 @@ import Loader from '../../components/loader';
 import ErrorMessage from '../../components/error-message';
 import Wrapper from '../../components/wrapper';
 
-import { requestHome } from '../../redux/home/actions';
-import homeSelectors from '../../redux/home/selectors';
-import { requestProjects, resetProjects } from '../../redux/projects/actions';
-import projectsSelectors from '../../redux/projects/selectors';
+import {
+    actions as homeActions,
+    selectors as homeSelectors
+} from '../../redux/home';
+import {
+    actions as projectsActions,
+    selectors as projectsSelectors
+} from '../../redux/projects';
 
 import { routes } from '../../lib/constants';
 
@@ -22,13 +26,13 @@ export default () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(requestHome());
-        dispatch(requestProjects());
+        dispatch(homeActions.requestHome());
+        dispatch(projectsActions.requestProjects());
     }, [dispatch]);
 
     useEffect(
         () => () => {
-            dispatch(resetProjects());
+            dispatch(projectsActions.resetProjects());
         },
         [dispatch]
     );

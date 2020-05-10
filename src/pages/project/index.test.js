@@ -2,13 +2,10 @@ import React from 'react';
 
 import { setupTestProvider } from '../../setupTests';
 
-import * as projectsActions from '../../redux/projects/actions';
-
 import {
-    FETCH_PROJECTS,
-    FETCH_PROJECTS_SUCCESS,
-    FETCH_PROJECTS_ERROR
-} from '../../redux/projects/types';
+    actions as projectsActions,
+    types as projectsTypes
+} from '../../redux/projects';
 
 import projectsResponse from '../../test-resources/projects-response';
 import { routes } from '../../lib/constants';
@@ -16,6 +13,12 @@ import Project from '.';
 
 jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
 jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
+
+const {
+    pending: projectsPending,
+    success: projectsSuccess,
+    error: projectsError
+} = projectsTypes;
 
 const projectResponse = projectsResponse[0];
 
@@ -27,7 +30,7 @@ const setupTestSuccess = setupTestProvider({
     render: () => <Project />,
     prerender: ({ dispatch }) => {
         dispatch({
-            type: FETCH_PROJECTS_SUCCESS,
+            type: projectsSuccess,
             data: projectsResponse
         });
     }
@@ -39,7 +42,7 @@ describe('Pages: Project', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_PROJECTS_ERROR
+                        type: projectsError
                     });
                 }
             });
@@ -52,7 +55,7 @@ describe('Pages: Project', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_PROJECTS_SUCCESS,
+                        type: projectsSuccess,
                         data: []
                     });
                 }
@@ -73,7 +76,7 @@ describe('Pages: Project', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_PROJECTS
+                        type: projectsPending
                     });
                 }
             });
@@ -170,7 +173,7 @@ describe('Pages: Project', () => {
                 const { wrapper } = setupTest({
                     prerender: ({ dispatch }) => {
                         dispatch({
-                            type: FETCH_PROJECTS_SUCCESS,
+                            type: projectsSuccess,
                             data: [
                                 {
                                     ...projectResponse,

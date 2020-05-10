@@ -1,10 +1,3 @@
-import {
-    FETCH_PROJECTS,
-    FETCH_PROJECTS_SUCCESS,
-    FETCH_PROJECTS_ERROR,
-    RESET_PROJECTS
-} from '../types';
-
 export const initialState = {
     isInitial: true,
     isPending: false,
@@ -12,37 +5,34 @@ export const initialState = {
     hasError: false
 };
 
-function projects(state = initialState, { type, data }) {
+export default (types) => (state = initialState, { type, data }) => {
     switch (type) {
-        case FETCH_PROJECTS:
+        case types.pending:
             return {
                 ...state,
-                isInitial: false,
-                isPending: true
+                isPending: true,
+                isInitial: false
             };
-        case FETCH_PROJECTS_SUCCESS:
+        case types.success:
             return {
                 ...state,
                 isInitial: false,
                 isPending: false,
                 data
             };
-        case FETCH_PROJECTS_ERROR:
+        case types.error:
             return {
                 ...state,
                 isInitial: false,
                 isPending: false,
                 hasError: true
             };
-        case RESET_PROJECTS:
+        case types.reset:
             return {
                 ...state,
-                isInitial: true,
-                data: initialState.data
+                ...initialState
             };
         default:
             return state;
     }
-}
-
-export default projects;
+};

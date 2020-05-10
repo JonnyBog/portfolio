@@ -10,8 +10,10 @@ import Text from '../../components/text';
 import Tiles from '../../components/tiles';
 import Wrapper from '../../components/wrapper';
 
-import { requestProjects, resetProjects } from '../../redux/projects/actions';
-import projectsSelectors from '../../redux/projects/selectors';
+import {
+    actions as projectsActions,
+    selectors as projectsSelectors
+} from '../../redux/projects';
 
 import styles from './index.module.css';
 
@@ -20,12 +22,12 @@ export default () => {
 
     const { slug } = useParams();
     useEffect(() => {
-        dispatch(requestProjects(slug));
+        dispatch(projectsActions.requestProjects(slug));
     }, [dispatch, slug]);
 
     useEffect(
         () => () => {
-            dispatch(resetProjects());
+            dispatch(projectsActions.resetProjects());
         },
         [dispatch]
     );

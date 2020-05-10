@@ -7,8 +7,10 @@ import Link from '../../components/link';
 import Text from '../../components/text';
 import Wrapper from '../../components/wrapper';
 
-import { requestContact } from '../../redux/contact/actions';
-import contactSelectors from '../../redux/contact/selectors';
+import {
+    actions as contactActions,
+    selectors as contactSelectors
+} from '../../redux/contact';
 
 import styles from './index.module.css';
 
@@ -16,7 +18,7 @@ export default () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(requestContact());
+        dispatch(contactActions.requestContact());
     }, [dispatch]);
 
     const {

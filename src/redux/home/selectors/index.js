@@ -1,16 +1,8 @@
 import { createSelector } from 'reselect';
 
-import getPredicateHelper from '../../../lib/helpers/get-predicate';
-
-const getPredicate = createSelector(
-    [(state) => getPredicateHelper(state?.home)],
-    (predicate) => ({
-        ...predicate
-    })
-);
-
-const getDescription = ({ home } = {}) => home?.data?.acf?.description;
-const getHeading = ({ home } = {}) => home?.data?.acf?.heading;
+const getAcf = ({ home } = {}) => home?.data[0]?.acf || {};
+const getDescription = (state) => getAcf(state).description;
+const getHeading = (state) => getAcf(state).heading;
 
 const getSimple = createSelector(
     [getDescription, getHeading],
@@ -21,6 +13,5 @@ const getSimple = createSelector(
 );
 
 export default {
-    getPredicate,
     getSimple
 };

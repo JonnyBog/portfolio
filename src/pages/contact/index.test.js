@@ -1,19 +1,23 @@
 import React from 'react';
 
 import { setupTestProvider } from '../../setupTests';
-import * as contactActions from '../../redux/contact/actions';
 
 import {
-    FETCH_CONTACT,
-    FETCH_CONTACT_SUCCESS,
-    FETCH_CONTACT_ERROR
-} from '../../redux/contact/types';
+    actions as contactActions,
+    types as contactTypes
+} from '../../redux/contact';
 
 import contactResponse from '../../test-resources/contact-response';
 
 import Contact from '.';
 
 jest.spyOn(contactActions, 'requestContact').mockReturnValue(jest.fn());
+
+const {
+    pending: contactPending,
+    success: contactSuccess,
+    error: contactError
+} = contactTypes;
 
 const setupTest = setupTestProvider({
     render: () => <Contact />
@@ -23,7 +27,7 @@ const setupTestSuccess = setupTestProvider({
     render: () => <Contact />,
     prerender: ({ dispatch }) => {
         dispatch({
-            type: FETCH_CONTACT_SUCCESS,
+            type: contactSuccess,
             data: contactResponse
         });
     }
@@ -38,7 +42,7 @@ describe('Pages: Contact', () => {
 
         it('renders the loader when contact is pending', () => {
             const { wrapper } = setupTest({
-                type: FETCH_CONTACT
+                type: contactPending
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
@@ -49,7 +53,7 @@ describe('Pages: Contact', () => {
             const { wrapper } = setupTest({
                 prerender: ({ dispatch }) => {
                     dispatch({
-                        type: FETCH_CONTACT_ERROR
+                        type: contactError
                     });
                 }
             });
