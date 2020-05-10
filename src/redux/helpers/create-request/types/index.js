@@ -1,6 +1,10 @@
 const PREFIX = 'FETCH_';
 
 export default (name) => {
+    if (!name) {
+        return undefined;
+    }
+
     const TYPE = name.toUpperCase();
 
     return {

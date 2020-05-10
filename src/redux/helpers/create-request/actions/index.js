@@ -14,7 +14,7 @@ const createActions = ({ pending, success, error, reset }) => ({
     })
 });
 
-export default ({ types, endpoint: initialEndpoint }) => {
+export default ({ types, endpoint: initialEndpoint } = {}) => {
     const {
         fetchData,
         fetchDataSuccess,
@@ -27,6 +27,7 @@ export default ({ types, endpoint: initialEndpoint }) => {
             const endpoint = slug
                 ? `${initialEndpoint}&slug=${slug}`
                 : initialEndpoint;
+
             dispatch(fetchData());
             return fetch(endpoint)
                 .then((response) => response.json())
