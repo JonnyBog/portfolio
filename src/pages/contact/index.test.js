@@ -1,23 +1,16 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider } from '../../setupTests';
+import { setupTestProvider, resolvePromises } from '../../setupTests';
 
 import {
-    actions as contactActions,
-    types as contactTypes
+    endpoint as contactEndpoint,
+    params as contactParams
 } from '../../redux/contact';
 
 import contactResponse from '../../test-resources/contact-response';
 
 import Contact from '.';
-
-jest.spyOn(contactActions, 'requestContact').mockReturnValue(jest.fn());
-
-const {
-    pending: contactPending,
-    success: contactSuccess,
-    error: contactError
-} = contactTypes;
 
 const setupTest = setupTestProvider({
     render: () => <Contact />
@@ -25,12 +18,13 @@ const setupTest = setupTestProvider({
 
 const setupTestSuccess = setupTestProvider({
     render: () => <Contact />,
-    prerender: ({ dispatch }) => {
-        dispatch({
-            type: contactSuccess,
-            data: contactResponse
-        });
-    }
+    stubRequests: [
+        {
+            endpoint: contactEndpoint,
+            params: contactParams,
+            response: contactResponse
+        }
+    ]
 });
 
 describe('Pages: Contact', () => {
@@ -42,44 +36,55 @@ describe('Pages: Contact', () => {
 
         it('renders the loader when contact is pending', () => {
             const { wrapper } = setupTest({
-                type: contactPending
+                stubRequests: [
+                    {
+                        endpoint: contactEndpoint,
+                        params: contactParams,
+                        response: contactResponse
+                    }
+                ]
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });
 
     describe('Error', () => {
-        it('renders error when contact has an error', () => {
+        it('renders error when contact has an error', async () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: contactError
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: contactEndpoint,
+                        params: contactParams,
+                        status: 500
+                    }
+                ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the contact page.'
             );
         });
     });
 
-    describe('Actions', () => {
-        it('should call requestContact on mount', () => {
-            setupTest();
-            expect(contactActions.requestContact).toHaveBeenCalled();
-        });
-    });
-
     describe('Success', () => {
         const { wrapper } = setupTestSuccess();
 
-        it('renders the description', () => {
+        it('renders the description', async () => {
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-id="description"]')).toHaveText(
                 contactResponse[0].acf.description
             );
         });
 
-        it('renders the contact number', () => {
+        it('renders the contact number', async () => {
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-id="number"] a')).toHaveProp(
                 'href',
                 `tel:${contactResponse[0].acf.number}`
@@ -89,7 +94,10 @@ describe('Pages: Contact', () => {
             );
         });
 
-        it('renders the contact email', () => {
+        it('renders the contact email', async () => {
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-id="email"] a')).toHaveProp(
                 'href',
                 'mailto:' + contactResponse[0].acf.email

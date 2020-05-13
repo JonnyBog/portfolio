@@ -2,8 +2,8 @@ import { api } from '../../lib/constants';
 import createRequest from '../helpers/create-request';
 import customSelectors from './selectors';
 
-const endpoint = `${api}/pages`;
-const params = {
+export const endpoint = `${api}/pages`;
+export const params = {
     slug: 'jonny-contact',
     _fields: 'acf'
 };

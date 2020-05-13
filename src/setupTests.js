@@ -2,6 +2,7 @@ import React from 'react';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
+import moxios from 'moxios';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -11,6 +12,13 @@ import 'jest-enzyme';
 import rootReducer from './redux/reducers';
 
 configure({ adapter: new Adapter() });
+
+export const resolvePromises = (size = 10) =>
+    Promise.all(
+        Array.from(Array(size).keys()).map(() =>
+            process.nextTick(() => Promise.resolve())
+        )
+    );
 
 export const setupTestComponent = ({
     render: baseRender,
@@ -25,18 +33,29 @@ export const setupTestComponent = ({
     };
 };
 
+const buildParams = (params) =>
+    params
+        ? Object.entries(params)
+              .reduce((acc, [key, value]) => `${acc}${key}=${value}&`, '?')
+              .slice(0, -1)
+        : '';
+
+afterEach(() => moxios.uninstall());
+
 export const setupTestProvider = ({
     render: baseRender,
     prerender: basePrerender = () => {},
     path: basePath,
     initialEntries: baseInitialEntries,
-    props: baseProps
+    props: baseProps,
+    stubRequests: baseStubRequests = []
 } = {}) => ({
     render: testRender,
     props: testProps,
     prerender: testPrerender = () => {},
     path: testPath,
-    initialEntries: testInitialEntries
+    initialEntries: testInitialEntries,
+    stubRequests: testStubRequests = []
 } = {}) => {
     const render = testRender || baseRender;
     const props = testProps || baseProps;
@@ -46,6 +65,18 @@ export const setupTestProvider = ({
     testPrerender(store);
     const path = testPath || basePath || '*';
     const initialEntries = testInitialEntries || baseInitialEntries || ['/'];
+
+    moxios.install();
+    const stubRequests = [...baseStubRequests, ...testStubRequests];
+    stubRequests.forEach(
+        ({ endpoint: initialEndpoint, params, status = 200, response }) => {
+            const endpoint = `${initialEndpoint}${buildParams(params)}`;
+            moxios.stubRequest(endpoint, {
+                status,
+                responseText: response
+            });
+        }
+    );
 
     return {
         wrapper: mount(
