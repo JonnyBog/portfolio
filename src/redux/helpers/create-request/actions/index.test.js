@@ -1,4 +1,4 @@
-import fetchMock from 'fetch-mock';
+import moxios from 'moxios';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -9,68 +9,112 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Actions: create request', () => {
-    afterEach(() => {
-        fetchMock.restore();
-    });
-
     const name = 'test';
     const endpoint = 'http://www.test.com/test';
+    const data = [{ test: 'test' }];
     const types = createTypes(name);
     const { pending, success, error, reset } = types;
-    const { requestData, requestReset } = createActions({ types, endpoint });
 
     describe('requestData', () => {
-        it('creates success when fetching data is a success', () => {
-            fetchMock.getOnce(endpoint, {
-                body: { test: 'test' },
-                headers: { 'content-type': 'application/json' }
+        beforeEach(() => {
+            moxios.install();
+        });
+        afterEach(() => {
+            moxios.uninstall();
+        });
+
+        it('creates success when fetching data is a success', (done) => {
+            const { requestData } = createActions({
+                types,
+                endpoint
             });
+            moxios.stubRequest(endpoint, {
+                status: 200,
+                responseText: data
+            });
+
             const store = mockStore();
 
             return store.dispatch(requestData()).then(() => {
-                expect(fetchMock._calls[0][0]).toBe(endpoint);
-                expect(store.getActions()).toEqual([
-                    { type: pending },
-                    { type: success, data: { test: 'test' } }
-                ]);
+                expect(store.getActions()[0].type).toEqual(pending);
+                expect(store.getActions()[1].type).toEqual(success);
+                expect(store.getActions()[1].data).toEqual(data);
+                done();
             });
         });
 
-        it('creates success when fetching data is a success and there is a slug', () => {
-            const slug = 'test-1';
-            const endpointWithSlug = `${endpoint}&slug=${slug}`;
-            fetchMock.getOnce(endpointWithSlug, {
-                body: { test: 'test' },
-                headers: { 'content-type': 'application/json' }
+        it('creates success when fetching data is a success and there is static params', (done) => {
+            const params = {
+                slug: 'test'
+            };
+            const { requestData } = createActions({
+                types,
+                endpoint,
+                params
             });
-            const store = mockStore();
+            moxios.stubRequest(`${endpoint}?slug=test`, {
+                status: 200,
+                responseText: data
+            });
 
-            return store.dispatch(requestData(slug)).then(() => {
-                expect(fetchMock._calls[0][0]).toBe(endpointWithSlug);
-                expect(store.getActions()).toEqual([
-                    { type: pending },
-                    { type: success, data: { test: 'test' } }
-                ]);
-            });
-        });
-
-        it('creates error when fetching data is a failure', () => {
-            fetchMock.getOnce(endpoint, {
-                headers: { 'content-type': 'application/json' }
-            });
             const store = mockStore();
 
             return store.dispatch(requestData()).then(() => {
-                expect(fetchMock._calls[0][0]).toBe(endpoint);
-                expect(store.getActions()).toEqual([
-                    { type: pending },
-                    { type: error }
-                ]);
+                expect(store.getActions()[0].type).toEqual(pending);
+                expect(store.getActions()[1].type).toEqual(success);
+                expect(store.getActions()[1].data).toEqual(data);
+                done();
+            });
+        });
+
+        it('creates success when fetching data is a success and there is dynamic params', (done) => {
+            const params = {
+                slug: 'test'
+            };
+            const { requestData } = createActions({
+                types,
+                endpoint
+            });
+            moxios.stubRequest(`${endpoint}?slug=test`, {
+                status: 200,
+                responseText: data
+            });
+
+            const store = mockStore();
+
+            return store.dispatch(requestData({ params })).then(() => {
+                expect(store.getActions()[0].type).toEqual(pending);
+                expect(store.getActions()[1].type).toEqual(success);
+                expect(store.getActions()[1].data).toEqual(data);
+                done();
+            });
+        });
+
+        it('creates error when fetching data is a failure', (done) => {
+            const { requestData } = createActions({
+                types,
+                endpoint
+            });
+            moxios.stubRequest(endpoint, {
+                status: 500
+            });
+
+            const store = mockStore();
+
+            return store.dispatch(requestData()).then(() => {
+                expect(store.getActions()[0].type).toEqual(pending);
+                expect(store.getActions()[1].type).toEqual(error);
+                done();
             });
         });
     });
 
     it('requestReset', () => {
+        const { requestReset } = createActions({
+            types,
+            endpoint
+        });
+
         const store = mockStore();
         store.dispatch(requestReset());
 

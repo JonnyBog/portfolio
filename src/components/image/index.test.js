@@ -13,11 +13,6 @@ const setupTest = setupTestComponent({
 });
 
 describe('Components: Image', () => {
-    afterEach(() => {
-        jest.clearAllMocks();
-        jest.restoreAllMocks();
-    });
-
     it('renders an image with correct data-src', () => {
         const { wrapper } = setupTest();
         expect(wrapper.find('img')).toHaveProp('data-src', 'test.png');

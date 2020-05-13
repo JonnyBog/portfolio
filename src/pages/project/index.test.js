@@ -91,7 +91,9 @@ describe('Pages: Project', () => {
                 path: `${routes.project}/:slug`,
                 initialEntries: [`${routes.project}/${slug}`]
             });
-            expect(projectsActions.requestProjects).toHaveBeenCalledWith(slug);
+            expect(projectsActions.requestProjects).toHaveBeenCalledWith({
+                params: { slug }
+            });
         });
 
         it('should call resetProjects on unmount', () => {

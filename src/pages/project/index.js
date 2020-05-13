@@ -22,7 +22,7 @@ export default () => {
 
     const { slug } = useParams();
     useEffect(() => {
-        dispatch(projectsActions.requestProjects(slug));
+        dispatch(projectsActions.requestProjects({ params: { slug } }));
     }, [dispatch, slug]);
 
     useEffect(

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const createActions = ({ pending, success, error, reset }) => ({
     fetchData: () => ({
         type: pending
@@ -14,7 +16,7 @@ const createActions = ({ pending, success, error, reset }) => ({
     })
 });
 
-export default ({ types, endpoint: initialEndpoint } = {}) => {
+export default ({ types, endpoint, params = {} } = {}) => {
     const {
         fetchData,
         fetchDataSuccess,
@@ -23,18 +25,21 @@ export default ({ types, endpoint: initialEndpoint } = {}) => {
     } = createActions(types);
 
     return {
-        requestData: (slug) => (dispatch) => {
-            const endpoint = slug
-                ? `${initialEndpoint}&slug=${slug}`
-                : initialEndpoint;
-
+        requestData: ({ params: dynamicParams = {} } = {}) => async (
+            dispatch
+        ) => {
             dispatch(fetchData());
-            return fetch(endpoint)
-                .then((response) => response.json())
-                .then(
-                    (data) => dispatch(fetchDataSuccess(data)),
-                    () => dispatch(fetchDataError())
-                );
+            try {
+                const response = await axios.get(endpoint, {
+                    params: {
+                        ...params,
+                        ...dynamicParams
+                    }
+                });
+                dispatch(fetchDataSuccess(response?.data));
+            } catch (error) {
+                dispatch(fetchDataError());
+            }
         },
         requestReset
     };
