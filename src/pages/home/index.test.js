@@ -1,11 +1,17 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider } from '../../setupTests';
+import { setupTestProvider, resolvePromises } from '../../setupTests';
 
-import { actions as homeActions, types as homeTypes } from '../../redux/home';
+import {
+    actions as homeActions,
+    endpoint as homeEndpoint,
+    params as homeParams
+} from '../../redux/home';
 import {
     actions as projectsActions,
-    types as projectsTypes
+    endpoint as projectsEndpoint,
+    params as projectsParams
 } from '../../redux/projects';
 
 import homeResponse from '../../test-resources/home-response';
@@ -14,37 +20,24 @@ import projectsResponse from '../../test-resources/projects-response';
 import { routes } from '../../lib/constants';
 import Home from '.';
 
-jest.spyOn(homeActions, 'requestHome').mockReturnValue(jest.fn());
-jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
-jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
-
-const {
-    pending: homePending,
-    success: homeSuccess,
-    error: homeError
-} = homeTypes;
-const {
-    pending: projectsPending,
-    success: projectsSuccess,
-    error: projectsError
-} = projectsTypes;
-
 const setupTest = setupTestProvider({
     render: () => <Home />
 });
 
 const setupTestSuccess = setupTestProvider({
     render: () => <Home />,
-    prerender: ({ dispatch }) => {
-        dispatch({
-            type: homeSuccess,
-            data: homeResponse
-        });
-        dispatch({
-            type: projectsSuccess,
-            data: projectsResponse
-        });
-    }
+    stubRequests: [
+        {
+            endpoint: homeEndpoint,
+            params: homeParams,
+            response: homeResponse
+        },
+        {
+            endpoint: projectsEndpoint,
+            params: projectsParams,
+            response: projectsResponse
+        }
+    ]
 });
 
 describe('Pages: Home', () => {
@@ -55,82 +48,105 @@ describe('Pages: Home', () => {
         });
 
         it('renders the loader when home is initial', () => {
+            jest.spyOn(homeActions, 'requestHome').mockImplementationOnce(
+                () => ({
+                    type: 'stub'
+                })
+            );
+
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: projectsSuccess,
-                        data: []
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: projectsEndpoint,
+                        params: projectsParams,
+                        response: projectsResponse
+                    }
+                ]
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when home is pending', () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: homePending
-                    });
-                    dispatch({
-                        type: projectsSuccess,
-                        data: []
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: projectsEndpoint,
+                        params: projectsParams,
+                        response: projectsResponse
+                    }
+                ]
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when projects is initial', () => {
+            jest.spyOn(
+                projectsActions,
+                'requestProjects'
+            ).mockImplementationOnce(() => ({
+                type: 'stub'
+            }));
+
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: homeSuccess,
-                        data: []
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: homeEndpoint,
+                        params: homeParams,
+                        response: homeResponse
+                    }
+                ]
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when projects is pending', () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: homeSuccess,
-                        data: []
-                    });
-                    dispatch({
-                        type: projectsPending
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: homeEndpoint,
+                        params: homeParams,
+                        response: homeResponse
+                    }
+                ]
             });
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });
 
     describe('Error', () => {
-        it('renders error when home has an error', () => {
+        it('renders error when home has an error', async () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: homeError
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: homeEndpoint,
+                        params: homeParams,
+                        status: 500
+                    }
+                ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the homepage.'
             );
         });
 
-        it('renders error when projects has an error', () => {
+        it('renders error when projects has an error', async () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: projectsError
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: projectsEndpoint,
+                        params: projectsParams,
+                        status: 500
+                    }
+                ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the homepage.'
             );
@@ -138,17 +154,10 @@ describe('Pages: Home', () => {
     });
 
     describe('Actions', () => {
-        it('should call requestHome on mount', () => {
-            setupTest();
-            expect(homeActions.requestHome).toHaveBeenCalled();
-        });
-
-        it('should call requestProjects on mount', () => {
-            setupTest();
-            expect(projectsActions.requestProjects).toHaveBeenCalled();
-        });
-
         it('should call resetProjects on unmount', () => {
+            jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(
+                jest.fn()
+            );
             const { wrapper } = setupTest();
             wrapper.unmount();
 
@@ -157,15 +166,23 @@ describe('Pages: Home', () => {
     });
 
     describe('Success', () => {
-        it('renders the description', () => {
+        it('renders the description', async () => {
             const { wrapper } = setupTestSuccess();
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-id="description"]')).toHaveText(
                 homeResponse[0].acf.description
             );
         });
 
-        it('renders the page header with text', () => {
+        it('renders the page header with text', async () => {
             const { wrapper } = setupTestSuccess();
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-id="page-heading"]')).toHaveText(
                 homeResponse[0].acf.heading
             );
@@ -174,8 +191,12 @@ describe('Pages: Home', () => {
         describe('Projects', () => {
             it.each(projectsResponse)(
                 'renders the correct components for project %#',
-                ({ acf, slug, title }) => {
+                async ({ acf, slug, title }) => {
                     const { wrapper } = setupTestSuccess();
+
+                    await act(() => resolvePromises());
+                    wrapper.update();
+
                     const project = wrapper.find(`[data-id="${slug}"]`);
 
                     expect(project.find('a')).toHaveProp(
