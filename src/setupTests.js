@@ -40,7 +40,12 @@ const buildParams = (params) =>
               .slice(0, -1)
         : '';
 
-afterEach(() => moxios.uninstall());
+afterEach(() => {
+    if (moxios.stubs.__items.length) {
+        moxios.uninstall();
+    }
+    jest.clearAllMocks();
+});
 
 export const setupTestProvider = ({
     render: baseRender,
@@ -66,8 +71,10 @@ export const setupTestProvider = ({
     const path = testPath || basePath || '*';
     const initialEntries = testInitialEntries || baseInitialEntries || ['/'];
 
-    moxios.install();
     const stubRequests = [...baseStubRequests, ...testStubRequests];
+    if (stubRequests.length) {
+        moxios.install();
+    }
     stubRequests.forEach(
         ({ endpoint: initialEndpoint, params, status = 200, response }) => {
             const endpoint = `${initialEndpoint}${buildParams(params)}`;

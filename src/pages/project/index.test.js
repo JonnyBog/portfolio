@@ -1,26 +1,20 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider } from '../../setupTests';
+import { setupTestProvider, resolvePromises } from '../../setupTests';
+import { routes } from '../../lib/constants';
 
 import {
     actions as projectsActions,
-    types as projectsTypes
+    endpoint as projectsEndpoint,
+    params as projectsParams
 } from '../../redux/projects';
 
 import projectsResponse from '../../test-resources/projects-response';
-import { routes } from '../../lib/constants';
 import Project from '.';
 
-jest.spyOn(projectsActions, 'requestProjects').mockReturnValue(jest.fn());
-jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(jest.fn());
-
-const {
-    pending: projectsPending,
-    success: projectsSuccess,
-    error: projectsError
-} = projectsTypes;
-
 const projectResponse = projectsResponse[0];
+const slug = 'test';
 
 const setupTest = setupTestProvider({
     render: () => <Project />
@@ -28,38 +22,55 @@ const setupTest = setupTestProvider({
 
 const setupTestSuccess = setupTestProvider({
     render: () => <Project />,
-    prerender: ({ dispatch }) => {
-        dispatch({
-            type: projectsSuccess,
-            data: projectsResponse
-        });
-    }
+    stubRequests: [
+        {
+            endpoint: projectsEndpoint,
+            params: {
+                ...projectsParams,
+                slug
+            },
+            response: projectsResponse
+        }
+    ],
+    path: `${routes.project}/:slug`,
+    initialEntries: [`${routes.project}/${slug}`]
 });
 
 describe('Pages: Project', () => {
     describe('Error', () => {
-        it('renders error when project has an error', () => {
+        it('renders error when project has an error', async () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: projectsError
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: projectsEndpoint,
+                        params: projectsParams,
+                        status: 500
+                    }
+                ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the project.'
             );
         });
 
-        it('renders error when project is empty and is not initial or pending', () => {
+        it('renders error when project is empty and is not initial or pending', async () => {
             const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: projectsSuccess,
-                        data: []
-                    });
-                }
+                stubRequests: [
+                    {
+                        endpoint: projectsEndpoint,
+                        params: projectsParams,
+                        response: []
+                    }
+                ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the project.'
             );
@@ -67,36 +78,28 @@ describe('Pages: Project', () => {
     });
 
     describe('Loading', () => {
-        it('should render loader when project is initial', () => {
+        it('should render loader initially', () => {
+            jest.spyOn(
+                projectsActions,
+                'requestProjects'
+            ).mockImplementationOnce(() => ({
+                type: 'stub'
+            }));
             const { wrapper } = setupTest();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders loader when project is pending', () => {
-            const { wrapper } = setupTest({
-                prerender: ({ dispatch }) => {
-                    dispatch({
-                        type: projectsPending
-                    });
-                }
-            });
+            const { wrapper } = setupTestSuccess();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });
 
     describe('Actions', () => {
-        it('should call requestProjects with the slug from the url on mount', () => {
-            const slug = 'test';
-            setupTest({
-                path: `${routes.project}/:slug`,
-                initialEntries: [`${routes.project}/${slug}`]
-            });
-            expect(projectsActions.requestProjects).toHaveBeenCalledWith({
-                params: { slug }
-            });
-        });
-
         it('should call resetProjects on unmount', () => {
+            jest.spyOn(projectsActions, 'resetProjects').mockReturnValue(
+                jest.fn()
+            );
             const { wrapper } = setupTest();
             wrapper.unmount();
 
@@ -105,8 +108,12 @@ describe('Pages: Project', () => {
     });
 
     describe('Success', () => {
-        it('renders tiles and tile', () => {
+        it('renders tiles and tile', async () => {
             const { wrapper } = setupTestSuccess();
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="tiles"]')).toExist();
             expect(wrapper.find('[data-qa="tile"]')).toExist();
         });
@@ -114,13 +121,19 @@ describe('Pages: Project', () => {
         describe('Project components', () => {
             const { wrapper } = setupTestSuccess();
 
-            it('renders the title', () => {
+            it('renders the title', async () => {
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('h1[data-id="title"]')).toHaveText(
                     projectResponse.title.rendered
                 );
             });
 
-            it('renders the image', () => {
+            it('renders the image', async () => {
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('img')).toHaveProp(
                     'data-src',
                     projectResponse.acf.image.sizes.medium_large
@@ -147,19 +160,28 @@ describe('Pages: Project', () => {
                 );
             });
 
-            it('renders the created with text', () => {
+            it('renders the created with text', async () => {
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('[data-id="created-width"]')).toHaveText(
                     `Built at: ${projectResponse.acf.created_with}`
                 );
             });
 
-            it('renders the tools text', () => {
+            it('renders the tools text', async () => {
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('[data-id="tools"]')).toHaveText(
                     `Tools used: ${projectResponse.acf.tools}`
                 );
             });
 
-            it('renders the link', () => {
+            it('renders the link', async () => {
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('a')).toHaveProp(
                     'href',
                     projectResponse.acf.project_link.url
@@ -171,12 +193,13 @@ describe('Pages: Project', () => {
         });
 
         describe('Success missing data', () => {
-            it('does not render the link when there is not one', () => {
+            it('does not render the link when there is not one', async () => {
                 const { wrapper } = setupTest({
-                    prerender: ({ dispatch }) => {
-                        dispatch({
-                            type: projectsSuccess,
-                            data: [
+                    stubRequests: [
+                        {
+                            endpoint: projectsEndpoint,
+                            params: projectsParams,
+                            response: [
                                 {
                                     ...projectResponse,
                                     acf: {
@@ -185,9 +208,13 @@ describe('Pages: Project', () => {
                                     }
                                 }
                             ]
-                        });
-                    }
+                        }
+                    ]
                 });
+
+                await act(() => resolvePromises());
+                wrapper.update();
+
                 expect(wrapper.find('a')).not.toExist();
             });
         });

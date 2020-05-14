@@ -4,6 +4,7 @@ import { act } from 'react-dom/test-utils';
 import { setupTestProvider, resolvePromises } from '../../setupTests';
 
 import {
+    actions as contactActions,
     endpoint as contactEndpoint,
     params as contactParams
 } from '../../redux/contact';
@@ -30,20 +31,17 @@ const setupTestSuccess = setupTestProvider({
 describe('Pages: Contact', () => {
     describe('Loading', () => {
         it('should render loader initially', () => {
+            jest.spyOn(contactActions, 'requestContact').mockImplementationOnce(
+                () => ({
+                    type: 'stub'
+                })
+            );
             const { wrapper } = setupTest();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when contact is pending', () => {
-            const { wrapper } = setupTest({
-                stubRequests: [
-                    {
-                        endpoint: contactEndpoint,
-                        params: contactParams,
-                        response: contactResponse
-                    }
-                ]
-            });
+            const { wrapper } = setupTestSuccess();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });
