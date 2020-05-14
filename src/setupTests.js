@@ -7,18 +7,12 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+import { act } from 'react-dom/test-utils';
 import 'jest-enzyme';
 
 import rootReducer from './redux/reducers';
 
 configure({ adapter: new Adapter() });
-
-export const resolvePromises = (size = 10) =>
-    Promise.all(
-        Array.from(Array(size).keys()).map(() =>
-            process.nextTick(() => Promise.resolve())
-        )
-    );
 
 export const setupTestComponent = ({
     render: baseRender,
@@ -32,6 +26,13 @@ export const setupTestComponent = ({
         )
     };
 };
+
+const resolvePromises = (size = 10) =>
+    Promise.all(
+        Array.from(Array(size).keys()).map(() =>
+            process.nextTick(() => Promise.resolve())
+        )
+    );
 
 const buildParams = (params) =>
     params
@@ -85,21 +86,29 @@ export const setupTestProvider = ({
         }
     );
 
+    const wrapper = mount(
+        <MemoryRouter initialEntries={initialEntries}>
+            <Provider store={store}>
+                <Route
+                    path={path}
+                    render={({ history: _history }) => {
+                        history = _history;
+                        return React.cloneElement(render(), props);
+                    }}
+                />
+            </Provider>
+        </MemoryRouter>
+    );
+
+    const wait = async () => {
+        await act(() => resolvePromises());
+        wrapper.update();
+    };
+
     return {
-        wrapper: mount(
-            <MemoryRouter initialEntries={initialEntries}>
-                <Provider store={store}>
-                    <Route
-                        path={path}
-                        render={({ history: _history }) => {
-                            history = _history;
-                            return React.cloneElement(render(), props);
-                        }}
-                    />
-                </Provider>
-            </MemoryRouter>
-        ),
+        wrapper,
         store,
-        history
+        history,
+        wait
     };
 };

@@ -1,7 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider, resolvePromises } from '../../setupTests';
+import { setupTestProvider } from '../../setupTests';
 
 import {
     actions as contactActions,
@@ -48,7 +47,7 @@ describe('Pages: Contact', () => {
 
     describe('Error', () => {
         it('renders error when contact has an error', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: contactEndpoint,
@@ -58,8 +57,7 @@ describe('Pages: Contact', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the contact page.'
@@ -68,11 +66,10 @@ describe('Pages: Contact', () => {
     });
 
     describe('Success', () => {
-        const { wrapper } = setupTestSuccess();
+        const { wrapper, wait } = setupTestSuccess();
 
         it('renders the description', async () => {
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-id="description"]')).toHaveText(
                 contactResponse[0].acf.description
@@ -80,8 +77,7 @@ describe('Pages: Contact', () => {
         });
 
         it('renders the contact number', async () => {
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-id="number"] a')).toHaveProp(
                 'href',
@@ -93,8 +89,7 @@ describe('Pages: Contact', () => {
         });
 
         it('renders the contact email', async () => {
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-id="email"] a')).toHaveProp(
                 'href',

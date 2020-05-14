@@ -1,7 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider, resolvePromises } from '../../setupTests';
+import { setupTestProvider } from '../../setupTests';
 
 import {
     actions as homeActions,
@@ -65,7 +64,7 @@ describe('Pages: Home', () => {
                 })
             );
 
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: projectsEndpoint,
@@ -75,14 +74,13 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when home is pending', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: projectsEndpoint,
@@ -92,8 +90,7 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
@@ -106,7 +103,7 @@ describe('Pages: Home', () => {
                 type: 'stub'
             }));
 
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: homeEndpoint,
@@ -116,14 +113,13 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
         it('renders the loader when projects is pending', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: homeEndpoint,
@@ -133,8 +129,7 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
@@ -142,7 +137,7 @@ describe('Pages: Home', () => {
 
     describe('Error', () => {
         it('renders error when home has an error', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: homeEndpoint,
@@ -152,8 +147,7 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the homepage.'
@@ -161,7 +155,7 @@ describe('Pages: Home', () => {
         });
 
         it('renders error when projects has an error', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: projectsEndpoint,
@@ -171,8 +165,7 @@ describe('Pages: Home', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the homepage.'
@@ -194,10 +187,9 @@ describe('Pages: Home', () => {
 
     describe('Success', () => {
         it('renders the description', async () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper, wait } = setupTestSuccess();
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-id="description"]')).toHaveText(
                 homeResponse[0].acf.description
@@ -205,10 +197,9 @@ describe('Pages: Home', () => {
         });
 
         it('renders the page header with text', async () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper, wait } = setupTestSuccess();
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-id="page-heading"]')).toHaveText(
                 homeResponse[0].acf.heading
@@ -219,10 +210,9 @@ describe('Pages: Home', () => {
             it.each(projectsResponse)(
                 'renders the correct components for project %#',
                 async ({ acf, slug, title }) => {
-                    const { wrapper } = setupTestSuccess();
+                    const { wrapper, wait } = setupTestSuccess();
 
-                    await act(() => resolvePromises());
-                    wrapper.update();
+                    await wait();
 
                     const project = wrapper.find(`[data-id="${slug}"]`);
 

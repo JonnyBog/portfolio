@@ -1,7 +1,6 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 
-import { setupTestProvider, resolvePromises } from '../../setupTests';
+import { setupTestProvider } from '../../setupTests';
 import { routes } from '../../lib/constants';
 
 import {
@@ -39,7 +38,7 @@ const setupTestSuccess = setupTestProvider({
 describe('Pages: Project', () => {
     describe('Error', () => {
         it('renders error when project has an error', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: projectsEndpoint,
@@ -49,8 +48,7 @@ describe('Pages: Project', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the project.'
@@ -58,7 +56,7 @@ describe('Pages: Project', () => {
         });
 
         it('renders error when project is empty and is not initial or pending', async () => {
-            const { wrapper } = setupTest({
+            const { wrapper, wait } = setupTest({
                 stubRequests: [
                     {
                         endpoint: projectsEndpoint,
@@ -68,8 +66,7 @@ describe('Pages: Project', () => {
                 ]
             });
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="error-message"]')).toHaveText(
                 'Oops, something went wrong with loading the project.'
@@ -109,21 +106,19 @@ describe('Pages: Project', () => {
 
     describe('Success', () => {
         it('renders tiles and tile', async () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper, wait } = setupTestSuccess();
 
-            await act(() => resolvePromises());
-            wrapper.update();
+            await wait();
 
             expect(wrapper.find('[data-qa="tiles"]')).toExist();
             expect(wrapper.find('[data-qa="tile"]')).toExist();
         });
 
         describe('Project components', () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper, wait } = setupTestSuccess();
 
             it('renders the title', async () => {
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('h1[data-id="title"]')).toHaveText(
                     projectResponse.title.rendered
@@ -131,8 +126,7 @@ describe('Pages: Project', () => {
             });
 
             it('renders the image', async () => {
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('img')).toHaveProp(
                     'data-src',
@@ -161,8 +155,7 @@ describe('Pages: Project', () => {
             });
 
             it('renders the created with text', async () => {
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('[data-id="created-width"]')).toHaveText(
                     `Built at: ${projectResponse.acf.created_with}`
@@ -170,8 +163,7 @@ describe('Pages: Project', () => {
             });
 
             it('renders the tools text', async () => {
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('[data-id="tools"]')).toHaveText(
                     `Tools used: ${projectResponse.acf.tools}`
@@ -179,8 +171,7 @@ describe('Pages: Project', () => {
             });
 
             it('renders the link', async () => {
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('a')).toHaveProp(
                     'href',
@@ -194,7 +185,7 @@ describe('Pages: Project', () => {
 
         describe('Success missing data', () => {
             it('does not render the link when there is not one', async () => {
-                const { wrapper } = setupTest({
+                const { wrapper, wait } = setupTest({
                     stubRequests: [
                         {
                             endpoint: projectsEndpoint,
@@ -212,8 +203,7 @@ describe('Pages: Project', () => {
                     ]
                 });
 
-                await act(() => resolvePromises());
-                wrapper.update();
+                await wait();
 
                 expect(wrapper.find('a')).not.toExist();
             });
