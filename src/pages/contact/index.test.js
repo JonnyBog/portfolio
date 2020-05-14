@@ -41,7 +41,7 @@ describe('Pages: Contact', () => {
         });
 
         it('renders the loader when contact is pending', () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper } = setupTest();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });

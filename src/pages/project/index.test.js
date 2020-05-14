@@ -90,7 +90,7 @@ describe('Pages: Project', () => {
         });
 
         it('renders loader when project is pending', () => {
-            const { wrapper } = setupTestSuccess();
+            const { wrapper } = setupTest();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });

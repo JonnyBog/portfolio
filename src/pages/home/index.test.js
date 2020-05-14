@@ -43,11 +43,22 @@ const setupTestSuccess = setupTestProvider({
 describe('Pages: Home', () => {
     describe('Loading', () => {
         it('should render loader initially', () => {
+            jest.spyOn(homeActions, 'requestHome').mockImplementationOnce(
+                () => ({
+                    type: 'stub'
+                })
+            );
+            jest.spyOn(
+                projectsActions,
+                'requestProjects'
+            ).mockImplementationOnce(() => ({
+                type: 'stub'
+            }));
             const { wrapper } = setupTest();
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
-        it('renders the loader when home is initial', () => {
+        it('renders the loader when home is initial', async () => {
             jest.spyOn(homeActions, 'requestHome').mockImplementationOnce(
                 () => ({
                     type: 'stub'
@@ -63,10 +74,14 @@ describe('Pages: Home', () => {
                     }
                 ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
-        it('renders the loader when home is pending', () => {
+        it('renders the loader when home is pending', async () => {
             const { wrapper } = setupTest({
                 stubRequests: [
                     {
@@ -76,10 +91,14 @@ describe('Pages: Home', () => {
                     }
                 ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
-        it('renders the loader when projects is initial', () => {
+        it('renders the loader when projects is initial', async () => {
             jest.spyOn(
                 projectsActions,
                 'requestProjects'
@@ -96,10 +115,14 @@ describe('Pages: Home', () => {
                     }
                 ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
 
-        it('renders the loader when projects is pending', () => {
+        it('renders the loader when projects is pending', async () => {
             const { wrapper } = setupTest({
                 stubRequests: [
                     {
@@ -109,6 +132,10 @@ describe('Pages: Home', () => {
                     }
                 ]
             });
+
+            await act(() => resolvePromises());
+            wrapper.update();
+
             expect(wrapper.find('[data-qa="loader"]')).toExist();
         });
     });
